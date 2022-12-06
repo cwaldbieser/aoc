@@ -40,7 +40,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("Advent of Code 2022, day 6 part 1")
+    parser = argparse.ArgumentParser("Advent of Code 2022, day 1 part 1")
     parser.add_argument(
         "infile", type=argparse.FileType("r"), action="store", help="The input file."
     )
