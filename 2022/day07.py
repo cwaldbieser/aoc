@@ -2,6 +2,7 @@
 
 import argparse
 import itertools
+import pprint
 
 
 def main(args):
@@ -9,7 +10,38 @@ def main(args):
     The main function entrypoint.
     """
     filesystem = parse_filesystem(args.infile)
-    print(filesystem)
+    pprint.pprint(filesystem)
+    # total = 0
+    root_folder = filesystem["/"]
+    folder_sizes = []
+    calc_folder_sizes_in_tree("/", root_folder, folder_sizes)
+    max_size = 100_000
+    small_folders = [obj for obj in folder_sizes if obj["size"] <= max_size]
+    total = 0
+    print("Folders smaller than {} bytes:".format(max_size))
+    for obj in small_folders:
+        name = obj["name"]
+        size = obj["size"]
+        print("- folder: {}, Size: {}".format(name, size))
+        total += size
+    print("Total size of small folders: {}".format(total))
+
+
+def calc_folder_sizes_in_tree(name, folder_obj, results):
+    """
+    Calculate the size of every folder in the tree rooted at `folder`.
+    """
+    contents = folder_obj["contents"]
+    size = 0
+    for objname, fsobj in contents.items():
+        obj_size = fsobj.get("size")
+        if obj_size is not None:
+            size += obj_size
+        else:
+            calc_folder_sizes_in_tree(objname, fsobj, results)
+            size += results[-1]["size"]
+    result = {"name": name, "size": size}
+    results.append(result)
 
 
 def make_folder_obj():
@@ -46,8 +78,7 @@ def parse_filesystem(infile):
         print("line", line)
         print("shell_state", shell_state)
         print("fsinfo", fsinfo)
-    import pprint
-    pprint.pprint(fsinfo)
+    return fsinfo
 
 
 def process_command(infile, lookahead, shell_state, fsinfo, line):
@@ -102,8 +133,6 @@ def process_ls_comand(shell_state, fsinfo, infile, lookahead):
     for line, nextline in zip(infile, lookahead):
         line = line.strip()
         nextline = nextline.strip()
-        print("line", line)
-        print("nextline", nextline)
         parts = line.split()
         if parts[0] == "dir":
             name = parts[1]
