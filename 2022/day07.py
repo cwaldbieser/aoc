@@ -10,8 +10,9 @@ def main(args):
     The main function entrypoint.
     """
     filesystem = parse_filesystem(args.infile)
+    print("Filesystem representation:")
     pprint.pprint(filesystem)
-    # total = 0
+    print("")
     root_folder = filesystem["/"]
     folder_sizes = []
     calc_folder_sizes_in_tree("/", root_folder, folder_sizes)
@@ -25,6 +26,24 @@ def main(args):
         print("- folder: {}, Size: {}".format(name, size))
         total += size
     print("Total size of small folders: {}".format(total))
+    print("")
+    total_filesystem_size = 70_000_000
+    update_required_size = 30_000_000
+    total_used_space = folder_sizes[-1]["size"]
+    available_space = total_filesystem_size - total_used_space
+    folder_sizes.sort(key=lambda o: o["size"])
+    for obj in folder_sizes:
+        if available_space + obj["size"] >= update_required_size:
+            print("Total filesystem size: {}".format(total_filesystem_size))
+            print("Update required space: {}".format(update_required_size))
+            print("Total available space: {}".format(available_space))
+            print(
+                (
+                    "Deleting folder `{}` (size {}) will result in "
+                    "a total of {} available space."
+                ).format(obj["name"], obj["size"], obj["size"] + available_space)
+            )
+            break
 
 
 def calc_folder_sizes_in_tree(name, folder_obj, results):
