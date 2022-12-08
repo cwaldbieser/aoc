@@ -19,6 +19,47 @@ def main(args):
             print("Tree at {}x{} is visible.".format(row, column))
     print("")
     print("{} trees are visible.".format(total))
+    print("")
+    max_scenic_score = 0
+    for row, column, _ in itergrid(grid):
+        score = calculate_scenic_score(grid, row, column)
+        print("Tree at ({},{}) has scenic score {}.".format(row, column, score))
+        max_scenic_score = max(max_scenic_score, score)
+    print("")
+    print("The maximum scenic score of any tree is {}.".format(max_scenic_score))
+
+
+def calculate_scenic_score(grid, x, y):
+    """
+    Calculate the scenic score for a tree in the grid.
+    """
+    considered_value = grid_get(grid, x, y)
+    grid_rows, grid_cols = get_grid_size(grid)
+    scenic_east = 0
+    scenic_west = 0
+    scenic_north = 0
+    scenic_south = 0
+    for x0 in reversed(range(0, x)):
+        value = grid_get(grid, x0, y)
+        scenic_east += 1
+        if value >= considered_value:
+            break
+    for x0 in range(x + 1, grid_rows):
+        value = grid_get(grid, x0, y)
+        scenic_west += 1
+        if value >= considered_value:
+            break
+    for y0 in reversed(range(0, y)):
+        value = grid_get(grid, x, y0)
+        scenic_north += 1
+        if value >= considered_value:
+            break
+    for y0 in range(y + 1, grid_cols):
+        value = grid_get(grid, x, y0)
+        scenic_south += 1
+        if value >= considered_value:
+            break
+    return scenic_east * scenic_west * scenic_north * scenic_south
 
 
 def itergrid(grid):
@@ -47,7 +88,7 @@ def is_visible(grid, x, y):
         if value >= considered_value:
             visible_east = False
             break
-    for x0 in range(x+1, grid_rows):
+    for x0 in range(x + 1, grid_rows):
         value = grid_get(grid, x0, y)
         if value >= considered_value:
             visible_west = False
@@ -57,7 +98,7 @@ def is_visible(grid, x, y):
         if value >= considered_value:
             visible_north = False
             break
-    for y0 in range(y+1, grid_cols):
+    for y0 in range(y + 1, grid_cols):
         value = grid_get(grid, x, y0)
         if value >= considered_value:
             visible_south = False
