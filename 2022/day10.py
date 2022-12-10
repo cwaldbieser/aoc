@@ -13,6 +13,8 @@ def main(args):
     """
     The main function entrypoint.
     """
+    crt_cols = 40
+    crt = init_crt(cols=crt_cols)
     sample_cycles = itertools.count(args.start_cycle, args.interval)
     sample_total = 0
     instructions = parse_input(args.infile)
@@ -33,10 +35,57 @@ def main(args):
             print(" * signal strength: {:10d}".format(signal_strength))
         else:
             print("")
+        scancol = t0 % crt_cols
+        pixels = get_pixels(registers["X"])
+        if scancol in pixels:
+            plot_pixel(crt, t0)
         if instruction == "addx":
             registers["X"] += argument
     print("")
     print("Total signal strength: {}".format(sample_total))
+    print("")
+    plot_crt(crt)
+
+
+def plot_pixel(crt, t):
+    """
+    Plot a pixel on the CRT.
+    """
+    row0 = crt[0]
+    row_size = len(row0)
+    row_num = t // row_size
+    row_pos = t - row_num * row_size
+    row = crt[row_num]
+    row[row_pos] = "#"
+
+
+def get_pixels(x):
+    """
+    Get the 3 pixels.
+    """
+    return set([x-1, x, x+1])
+
+
+def plot_crt(crt):
+    """
+    Plot the CRT.
+    """
+    for row in crt:
+        print("".join(row))
+
+
+def init_crt(cols=40, rows=6):
+    """
+    Return an initialized CRT representation.
+    """
+    crt = []
+    for _ in range(rows):
+        row = []
+        for _ in range(cols):
+            row.append(".")
+        crt.append(row)
+    return crt
+
 
 
 def parse_input(infile):
