@@ -1,46 +1,59 @@
 #! /usr/bin/env python
 
 import argparse
+import functools
 
 
 def main(args):
     """
     The main function entrypoint.
     """
+    quiet = args.quiet
+    no_relief = args.no_relief
+    relief = not no_relief
     monkeys = configure_monkeys(args.infile)
     inspections = [0] * len(monkeys)
+    factors = [monkey["factor"] for monkey in monkeys]
+    lcm = functools.reduce(lambda a, b: a * b, factors)
     print("")
     print_monkey_items(monkeys)
-    for round in range(20):
+    for round in range(args.rounds):
         print("== Round {} ==".format(round + 1))
         for n, monkey in enumerate(monkeys):
-            print("Monkey {}".format(n))
+            if not quiet:
+                print("Monkey {}".format(n))
             items = monkey["items"]
             monkey["items"] = []
             for item in items:
-                print("  Monkey inspects an item with worry level of {}.".format(item))
+                if not quiet:
+                    print("  Monkey inspects an item with worry level of {}.".format(item))
                 inspections[n] += 1
                 operation = monkey["operation"]
-                new_worry = operation(item)
-                print("    Worry level changed to {}.".format(new_worry))
-                new_worry = new_worry // 3
-                print(
-                    (
-                        "    Monkey gets bored with item.  "
-                        "Worry level is divided by 3 to {}."
-                    ).format(new_worry)
-                )
+                new_worry = operation(item) % lcm
+                if not quiet:
+                    print("    Worry level changed to {}.".format(new_worry))
+                if relief:
+                    new_worry = new_worry // 3
+                if not quiet:
+                    print(
+                        (
+                            "    Monkey gets bored with item.  "
+                            "Worry level is divided by 3 to {}."
+                        ).format(new_worry)
+                    )
                 test = monkey["test"]
                 target = test(new_worry)
                 monkeys[target]["items"].append(new_worry)
-                print(
-                    "    Item with worry level {} is thrown to monkey {}.".format(
-                        new_worry, target
+                if not quiet:
+                    print(
+                        "    Item with worry level {} is thrown to monkey {}.".format(
+                            new_worry, target
+                        )
                     )
-                )
-        print("")
-        print_monkey_items(monkeys)
-        print("")
+        if not quiet:
+            print("")
+            print_monkey_items(monkeys)
+            print("")
     for n, count in enumerate(inspections):
         print("Monkey {} inspected {} itmes.".format(n, count))
     inspections.sort()
@@ -97,9 +110,10 @@ def parse_monkey(infile):
         if line.startswith(test_prefix):
             prefix_size = len(test_prefix)
             value = line[prefix_size:]
-            predicate = parse_predicate(value)
+            predicate, factor = parse_predicate(value)
             targets = parse_targets(infile)
             monkey["test"] = make_test(predicate, targets)
+            monkey["factor"] = factor
             return monkey
         raise Exception("Unexpected line: {}".format(line))
 
@@ -136,7 +150,7 @@ def parse_predicate(text):
     """
     parts = text.split()
     n = int(parts[-1])
-    return lambda x: x % n == 0
+    return (lambda x: x % n == 0), n
 
 
 def parse_targets(infile):
@@ -167,6 +181,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Advent of Code 2022, day 11")
     parser.add_argument(
         "infile", type=argparse.FileType("r"), action="store", help="The input file."
+    )
+    parser.add_argument("--no-relief", action="store_true", help="No worry relief.")
+    parser.add_argument("-q", "--quiet", action="store_true", help="Don't print extra information.")
+    parser.add_argument(
+        "-r", "--rounds", type=int, action="store", default=20, help="Number of rounds."
     )
     args = parser.parse_args()
     main(args)
