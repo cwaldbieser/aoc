@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import functools
 import json
 
 
@@ -8,13 +9,46 @@ def main(args):
     """
     The main function entrypoint.
     """
+    codes = []
     total = 0
     for n, (left, right) in enumerate(parse_pairs(args.infile)):
         pair_idx = n + 1
         print("=== Pair {} ===".format(pair_idx))
         if validate_pair(left, right):
             total += pair_idx
+        codes.append(left)
+        codes.append(right)
     print("Total of valid pairs is: {}".format(total))
+    print("")
+    divider_packets = [
+        [[2]],
+        [[6]],
+    ]
+    codes.extend(divider_packets)
+    codes.sort(key=functools.cmp_to_key(cmp_pairs))
+    indices = []
+    for n, code in enumerate(codes):
+        idx = n + 1
+        if code in divider_packets:
+            indices.append(idx)
+            print("*", code)
+        else:
+            print(code)
+    print("Decoder key:", functools.reduce(lambda x, y: x * y, indices))
+
+
+def cmp_pairs(left, right):
+    """
+    If left < right return -1.
+    If left > right return 1.
+    If left == right return 0.
+    """
+    result = validate_pair(left, right)
+    if result is None:
+        return 0
+    if result:
+        return -1
+    return 1
 
 
 def get_type(data):
