@@ -9,9 +9,7 @@ def main(args):
     The main function entrypoint.
     """
     segments = parse_segments(args.infile)
-    # print("== Segments ==")
-    # for segment in segments:
-    #     print(segment)
+    segments = list(segments)
     grid, grid_off = construct_grid(segments)
     plot_grid(grid)
     n = 0
@@ -21,6 +19,14 @@ def main(args):
         plot_grid(grid)
     print("")
     print("Dropped {} units of sand.".format(n))
+    grid, grid_off = construct_grid(segments, floor=True, hpad=160)
+    n = 0
+    while simulate_sand(grid, grid_off):
+        n += 1
+        print("== {} ==".format(n))
+        plot_grid(grid)
+    print("")
+    print("Dropped {} units of sand.".format(n + 1))
 
 
 def simulate_sand(grid, grid_off):
@@ -29,13 +35,13 @@ def simulate_sand(grid, grid_off):
     Return True if the sand comes to rest in the grid, or False if the sand
     falls into the infinite abyss.
     """
-    sand = (500, 0)
+    sand = (500, -1)
     grid_bottom = len(grid) - 1
-    in_grid = True
+    more_sand = True
     while True:
         x, y = sand
         if y == grid_bottom:
-            in_grid = False
+            more_sand = False
             break
         y += 1
         if grid_get(grid, grid_off, (x, y)) == ".":
@@ -54,12 +60,15 @@ def simulate_sand(grid, grid_off):
             sand = (x, y)
             continue
         break
-    if in_grid:
+    if sand == (500, 0):
+        more_sand = False
         grid_set(grid, grid_off, sand, "+")
-    return in_grid
+    if more_sand:
+        grid_set(grid, grid_off, sand, "+")
+    return more_sand
 
 
-def construct_grid(segments):
+def construct_grid(segments, floor=False, hpad=0):
     """
     Construct a grid from the segments.
     """
@@ -76,6 +85,10 @@ def construct_grid(segments):
             bound_down = max(bound_down, y)
     bound_right = max(bound_right, 500)  # Sand start
     bound_up = min(bound_up, 0)  # Sand start
+    bound_left -= hpad
+    bound_right += hpad
+    if floor:
+        bound_down += 2
     grid_width = bound_right - bound_left + 1
     grid_height = bound_down - bound_up + 1
     grid = [["."] * grid_width for _ in range(grid_height)]
@@ -97,7 +110,10 @@ def construct_grid(segments):
             else:
                 raise Exception("Segment does not form a straight line!")
             x0, y0 = x1, y1
-    grid_set(grid, grid_off, (500, 0), "+")
+    if floor:
+        floor_row = grid[-1]
+        for i in range(len(floor_row)):
+            floor_row[i] = "#"
     return grid, grid_off
 
 
