@@ -1,48 +1,49 @@
 #! /usr/bin/env python
 
 import argparse
-import sys
 
 
 def main(args):
     """
     The main function entrypoint.
     """
+    search_max = args.search_max
     inspect_row = args.inspect_row
-    grid_left = sys.maxsize
-    grid_top = sys.maxsize
-    grid_right = -sys.maxsize
-    grid_bottom = -sys.maxsize
     sensor_readings = []
     for sensor, beacon in parse_sensor_data(args.infile):
         sx, sy = sensor
         bx, by = beacon
-        grid_left = min(sx, bx, grid_left)
-        grid_top = min(sy, by, grid_top)
-        grid_right = max(sx, bx, grid_right)
-        grid_bottom = max(sy, by, grid_bottom)
         dist = calc_manhatten_dist(sensor, beacon)
         sensor_readings.append((sensor, beacon, dist))
         print(
             "Sensor: {}, closest beacon: {}, distance: {}".format(sensor, beacon, dist)
         )
-    print(
-        "Grid bounds: ({}, {}) - ({}, {})".format(
-            grid_left, grid_top, grid_right, grid_bottom
-        )
-    )
-    empty_count = calc_empty_row_spots(inspect_row, sensor_readings)
+    empty = calc_empty_row_spots(inspect_row, sensor_readings)
+    empty_count = len(empty)
     print(
         "No beacon could be in at least {} positions for row {}.".format(
             empty_count, inspect_row
         )
     )
+    potential_x = set(range(0, search_max + 1))
+    for row in range(0, search_max + 1):
+        print("Testing row {}".format(row))
+        empty = calc_empty_row_spots(row, sensor_readings, include_beacons=True)
+        valid_positions = potential_x - empty
+        for sensor, _, _ in sensor_readings:
+            sx, sy = sensor
+            if sy == row:
+                valid_positions.discard(sx)
+        for xpos in valid_positions:
+            print("Distress beacon at ({}, {}).".format(xpos, row))
+            print("Tuning frequency = {}".format(xpos * 4_000_000 + row))
 
 
-def calc_empty_row_spots(inspect_row, sensor_readings):
+def calc_empty_row_spots(inspect_row, sensor_readings, include_beacons=False):
     """
     Calculate the number of positions in `inspect_row` where there could be no
     distress beacon.
+    Returns a set of the empty positions.
     """
     beacon_positions = set([])
     empty_positions = set([])
@@ -57,10 +58,12 @@ def calc_empty_row_spots(inspect_row, sensor_readings):
         rend = sx + hdist + 1
         for x in range(rstart, rend):
             empty_positions.add(x)
-        if by == inspect_row:
-            beacon_positions.add(bx)
-    empty_positions -= beacon_positions
-    return len(empty_positions)
+        if not include_beacons:
+            if by == inspect_row:
+                beacon_positions.add(bx)
+    if not include_beacons:
+        empty_positions -= beacon_positions
+    return empty_positions
 
 
 def calc_manhatten_dist(sensor, beacon):
@@ -113,8 +116,15 @@ if __name__ == "__main__":
         "--inspect-row",
         type=int,
         action="store",
-        default=10,
+        default=2_000_000,
         help="Inspect the row at INSPECT_ROW",
+    )
+    parser.add_argument(
+        "--search-max",
+        type=int,
+        default=4_000_000,
+        action="store",
+        help="The maximum x or y coordinate to search.",
     )
     args = parser.parse_args()
     main(args)
