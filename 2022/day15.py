@@ -25,18 +25,55 @@ def main(args):
             empty_count, inspect_row
         )
     )
-    potential_x = set(range(0, search_max + 1))
     for row in range(0, search_max + 1):
-        print("Testing row {}".format(row))
-        empty = calc_empty_row_spots(row, sensor_readings, include_beacons=True)
-        valid_positions = potential_x - empty
-        for sensor, _, _ in sensor_readings:
-            sx, sy = sensor
-            if sy == row:
-                valid_positions.discard(sx)
-        for xpos in valid_positions:
-            print("Distress beacon at ({}, {}).".format(xpos, row))
-            print("Tuning frequency = {}".format(xpos * 4_000_000 + row))
+        covered, combined = is_row_empty(row, sensor_readings)
+        if len(combined) > 1:
+            print("Row {} is interesting.".format(row))
+            ex = combined[0][1]
+            for rstart, rend in combined[1:]:
+                for x in range(ex + 1, rstart):
+                    tuning_freq = x * 4_000_000 + row
+                    print(
+                        "  - Coords ({}, {}) tuning frequency: {}".format(
+                            x, row, tuning_freq
+                        )
+                    )
+            continue
+        coverage = combined[0]
+        cstart, cend = coverage
+        if cstart > 0 or cend < search_max:
+            print("Row {} is interesting.".format(row))
+            print(combined)
+
+
+def is_row_empty(row, sensor_readings):
+    """
+    Return True if the row is empty; False otherwise.
+    """
+    covered_ranges = []
+    for sensor, beacon, dist in sensor_readings:
+        sx, sy = sensor
+        bx, by = beacon
+        dist_to_row = abs(sy - row)
+        if dist_to_row > dist:
+            continue
+        hdist = dist - dist_to_row
+        rstart = sx - hdist
+        rend = sx + hdist
+        covered_ranges.append((rstart, rend))
+    covered_ranges.sort()
+    combined_ranges = []
+    start = covered_ranges[0][0]
+    end = covered_ranges[0][1]
+    for rstart, rend in covered_ranges[1:]:
+        if rstart <= end + 1:
+            end = max(rend, end)
+            continue
+        combined_ranges.append((start, end))
+        start = rstart
+        end = rend
+    combined_ranges.append((start, end))
+    return covered_ranges, combined_ranges
 
 
 def calc_empty_row_spots(inspect_row, sensor_readings, include_beacons=False):
