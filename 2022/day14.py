@@ -141,12 +141,18 @@ def grid_get(grid, grid_off, coords):
     return grid[j][i]
 
 
-def plot_grid(grid):
+def plot_grid(grid, max_width=121):
     """
     Plot the grid.
     """
+    grid_width = len(grid[0])
+    start = 0
+    end = grid_width
+    if grid_width > max_width:
+        start = (grid_width - max_width) // 2
+        end = start + max_width
     for row in grid:
-        print("".join(row))
+        print("".join(row[start:end]))
 
 
 def parse_segments(infile):
