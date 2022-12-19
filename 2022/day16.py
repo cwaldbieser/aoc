@@ -21,7 +21,7 @@ def main(args):
         flow_rate_map[label] = flow_rate
         flow_rates.append(flow_rate)
     valve_labels, valve_map, adj_matrix = create_adj_matrix(valves)
-    curr_valve_id = 0
+    curr_valve_id = valve_map["AA"]
     open_valve_ids = 0x00
     for valve_id, label in enumerate(valve_labels):
         print("{}: {}".format(label, valve_id))
@@ -84,9 +84,12 @@ def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
         )
         results.append(
             (
-                future_pressure,
-                future_path,
-                future_open_ids,
+                (
+                    future_pressure,
+                    future_path,
+                    future_open_ids,
+                ),
+                True,
             )
         )
 
@@ -100,15 +103,19 @@ def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
             result = calc_path_and_pressure(
                 time + 1, adj_matrix, valve_id, open_valve_ids
             )
-            results.append(result)
+            results.append((result, False))
     # Pick the result with the maximum pressure.
-    max_result = (-1, None, None)
-    for result in results:
+    max_result = ((-1, None, None), False)
+    for result, opened_valve in results:
         future_pressure, _, _ = result
-        if future_pressure > max_result[0]:
-            max_result = result
-    future_pressure, future_path, future_open_ids = max_result
-    return pressure + future_pressure, (curr_valve_id,) + future_path, future_open_ids
+        if future_pressure > max_result[0][0]:
+            max_result = (result, opened_valve)
+    (future_pressure, future_path, future_open_ids), opened_valve = max_result
+    if opened_valve:
+        valve_id = -curr_valve_id
+    else:
+        valve_id = curr_valve_id
+    return pressure + future_pressure, (valve_id,) + future_path, future_open_ids
 
 
 def create_adj_matrix(valves):
