@@ -1,10 +1,9 @@
 #! /usr/bin/env python
 
 import argparse
-import functools
 import sys
 
-flow_rates = []
+g_flow_rates = []
 
 
 def main(args):
@@ -13,19 +12,19 @@ def main(args):
     """
     valves = list(parse_valves(args.infile))
     flow_rate_map = {}
-    global flow_rates
+    global g_flow_rates
     for label, flow_rate, connections in valves:
         print("Valve {}, flow rate: {}".format(label, flow_rate))
         for connection in connections:
             print("  - Connects to {}".format(connection))
         flow_rate_map[label] = flow_rate
-        flow_rates.append(flow_rate)
+        g_flow_rates.append(flow_rate)
     valve_labels, valve_map, adj_matrix = create_adj_matrix(valves)
     curr_valve_id = valve_map["AA"]
     open_valve_ids = 0x00
     for valve_id, label in enumerate(valve_labels):
         print("{}: {}".format(label, valve_id))
-    for valve_id, flow_rate in enumerate(flow_rates):
+    for valve_id, flow_rate in enumerate(g_flow_rates):
         if flow_rate == 0:
             open_valve_ids = open_valve_ids | (0x01 << valve_id)
     print("open valves:", bin(open_valve_ids))
@@ -38,7 +37,10 @@ def main(args):
         return label
 
     pressure, path, open_valve_ids = calc_path_and_pressure(
-        time, adj_matrix, curr_valve_id, open_valve_ids
+        adj_matrix=adj_matrix,
+        time=time,
+        curr_valve_id=curr_valve_id,
+        open_valve_ids=open_valve_ids,
     )
     labels = [get_label(vid) for vid in path]
     print("Max. pressure:", pressure)
@@ -46,27 +48,38 @@ def main(args):
     print("open valves:", bin(open_valve_ids))
 
 
-@functools.cache
-def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
+def memoize(f):
+
+    cache = {}
+    arg_names = ["time", "curr_valve_id", "open_valve_ids"]
+
+    def _inner(**kwds):
+        key = tuple(kwds[arg_name] for arg_name in arg_names)
+        result = cache.get(key)
+        if result is None:
+            result = f(**kwds)
+            cache[key] = result
+        return result
+
+    return _inner
+
+
+@memoize
+def calc_path_and_pressure(adj_matrix, time, curr_valve_id, open_valve_ids):
     """
     Calculate the pressure released.
     """
-    global flow_rates
-    # Calculate pressure for this part of the path.
-    pressure = 0
+    global g_flow_rates
     valve_count = len(adj_matrix)
-    for valve_id in range(valve_count):
-        if (open_valve_ids & (0x01 << valve_id)) != 0x00:
-            pressure += flow_rates[valve_id]
 
     # Maximum time
     if time == 30:
-        return pressure, (curr_valve_id,), open_valve_ids
+        return 0, (curr_valve_id,), open_valve_ids
     # If all valves open, stay still.
     full_set = (0x01 << (valve_count + 1)) - 1
     if open_valve_ids == full_set:
         return (
-            pressure * (30 - time),
+            0,
             tuple([curr_valve_id] * (30 - time)),
             open_valve_ids,
         )
@@ -76,16 +89,17 @@ def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
     current_closed = (open_valve_ids & (0x01 << curr_valve_id)) == 0x00
     if current_closed:
         new_open_ids = open_valve_ids | (0x01 << curr_valve_id)
-        # print("Opening valve:", curr_valve_id)
-        # print("Current open valves:", bin(open_valve_ids))
-        # print("New open valves:", bin(new_open_ids))
+        pressure = g_flow_rates[curr_valve_id] * (30 - time)
         future_pressure, future_path, future_open_ids = calc_path_and_pressure(
-            time + 1, adj_matrix, curr_valve_id, new_open_ids
+            adj_matrix=adj_matrix,
+            time=time + 1,
+            curr_valve_id=curr_valve_id,
+            open_valve_ids=new_open_ids,
         )
         results.append(
             (
                 (
-                    future_pressure,
+                    pressure + future_pressure,
                     future_path,
                     future_open_ids,
                 ),
@@ -101,7 +115,10 @@ def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
         adj_flag = bool(adj_flag == 1)
         if adj_flag:
             result = calc_path_and_pressure(
-                time + 1, adj_matrix, valve_id, open_valve_ids
+                adj_matrix=adj_matrix,
+                time=time + 1,
+                curr_valve_id=valve_id,
+                open_valve_ids=open_valve_ids,
             )
             results.append((result, False))
     # Pick the result with the maximum pressure.
@@ -115,7 +132,7 @@ def calc_path_and_pressure(time, adj_matrix, curr_valve_id, open_valve_ids):
         valve_id = -curr_valve_id
     else:
         valve_id = curr_valve_id
-    return pressure + future_pressure, (valve_id,) + future_path, future_open_ids
+    return future_pressure, (valve_id,) + future_path, future_open_ids
 
 
 def create_adj_matrix(valves):
