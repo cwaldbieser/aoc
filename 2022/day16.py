@@ -10,6 +10,7 @@ def main(args):
     """
     The main function entrypoint.
     """
+    max_time = 30
     valves = list(parse_valves(args.infile))
     flow_rate_map = {}
     global g_flow_rates
@@ -38,6 +39,7 @@ def main(args):
 
     pressure, path, open_valve_ids = calc_path_and_pressure(
         adj_matrix=adj_matrix,
+        max_time=max_time,
         time=time,
         curr_valve_id=curr_valve_id,
         open_valve_ids=open_valve_ids,
@@ -65,7 +67,7 @@ def memoize(f):
 
 
 @memoize
-def calc_path_and_pressure(adj_matrix, time, curr_valve_id, open_valve_ids):
+def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve_ids):
     """
     Calculate the pressure released.
     """
@@ -73,14 +75,14 @@ def calc_path_and_pressure(adj_matrix, time, curr_valve_id, open_valve_ids):
     valve_count = len(adj_matrix)
 
     # Maximum time
-    if time == 30:
+    if time == max_time:
         return 0, (curr_valve_id,), open_valve_ids
     # If all valves open, stay still.
     full_set = (0x01 << (valve_count + 1)) - 1
     if open_valve_ids == full_set:
         return (
             0,
-            tuple([curr_valve_id] * (30 - time)),
+            tuple([curr_valve_id] * (max_time - time)),
             open_valve_ids,
         )
 
@@ -89,9 +91,10 @@ def calc_path_and_pressure(adj_matrix, time, curr_valve_id, open_valve_ids):
     current_closed = (open_valve_ids & (0x01 << curr_valve_id)) == 0x00
     if current_closed:
         new_open_ids = open_valve_ids | (0x01 << curr_valve_id)
-        pressure = g_flow_rates[curr_valve_id] * (30 - time)
+        pressure = g_flow_rates[curr_valve_id] * (max_time - time)
         future_pressure, future_path, future_open_ids = calc_path_and_pressure(
             adj_matrix=adj_matrix,
+            max_time=max_time,
             time=time + 1,
             curr_valve_id=curr_valve_id,
             open_valve_ids=new_open_ids,
@@ -116,6 +119,7 @@ def calc_path_and_pressure(adj_matrix, time, curr_valve_id, open_valve_ids):
         if adj_flag:
             result = calc_path_and_pressure(
                 adj_matrix=adj_matrix,
+                max_time=max_time,
                 time=time + 1,
                 curr_valve_id=valve_id,
                 open_valve_ids=open_valve_ids,
