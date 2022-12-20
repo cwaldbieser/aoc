@@ -1,0 +1,9 @@
+open valves: 0b1010100111011111111111111101110101101110101011001111110
+Max. pressure: 2171
+Path: ['AA', 'DI', 'KR', 'VP*', 'VP', 'PO', 'YF*', 'YF', 'SB', 'BZ', 'TO*', 'TO', 'PB', 'HP*', 'HP', 'SH', 'AU', 'RF*', 'RF', 'RD', 'QL*', 'QL', 'GJ', 'TJ', 'YV*', 'AA', 'VS', 'QK*', 'QK', 'WO', 'GV', 'GV', 'WO', 'QK', 'CV', 'VB*', 'VB', 'DO', 'NK*', 'NK', 'YH', 'TX*', 'TX', 'TS', 'IG*', 'IG', 'TS', 'IG', 'TS', 'IG', 'TS']
+open valves: 0b1111111111111111111111111111111111111111101011111111111
+
+real	2m32.728s
+user	2m31.323s
+sys	0m1.391s
+

@@ -4,16 +4,18 @@ import argparse
 import sys
 
 g_flow_rates = []
+g_start_valve_id = None
 
 
 def main(args):
     """
     The main function entrypoint.
     """
-    max_time = 30
+    global g_flow_rates
+    global g_start_valve_id
+
     valves = list(parse_valves(args.infile))
     flow_rate_map = {}
-    global g_flow_rates
     for label, flow_rate, connections in valves:
         print("Valve {}, flow rate: {}".format(label, flow_rate))
         for connection in connections:
@@ -21,7 +23,8 @@ def main(args):
         flow_rate_map[label] = flow_rate
         g_flow_rates.append(flow_rate)
     valve_labels, valve_map, adj_matrix = create_adj_matrix(valves)
-    curr_valve_id = valve_map["AA"]
+    g_start_valve_id = valve_map["AA"]
+    curr_valve_id = g_start_valve_id
     open_valve_ids = 0x00
     for valve_id, label in enumerate(valve_labels):
         print("{}: {}".format(label, valve_id))
@@ -29,6 +32,11 @@ def main(args):
         if flow_rate == 0:
             open_valve_ids = open_valve_ids | (0x01 << valve_id)
     print("open valves:", bin(open_valve_ids))
+    max_time = 30
+    other_players = 0
+    if args.elephant:
+        max_time = 26
+        other_players = 1
     time = 1
 
     def get_label(vid):
@@ -43,6 +51,7 @@ def main(args):
         time=time,
         curr_valve_id=curr_valve_id,
         open_valve_ids=open_valve_ids,
+        other_players=other_players,
     )
     labels = [get_label(vid) for vid in path]
     print("Max. pressure:", pressure)
@@ -53,7 +62,7 @@ def main(args):
 def memoize(f):
 
     cache = {}
-    arg_names = ["time", "curr_valve_id", "open_valve_ids"]
+    arg_names = ["time", "curr_valve_id", "open_valve_ids", "other_players"]
 
     def _inner(**kwds):
         key = tuple(kwds[arg_name] for arg_name in arg_names)
@@ -67,7 +76,9 @@ def memoize(f):
 
 
 @memoize
-def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve_ids):
+def calc_path_and_pressure(
+    adj_matrix, max_time, time, curr_valve_id, open_valve_ids, other_players
+):
     """
     Calculate the pressure released.
     """
@@ -76,7 +87,17 @@ def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve
 
     # Maximum time
     if time == max_time:
-        return 0, (curr_valve_id,), open_valve_ids
+        if other_players > 0:
+            return calc_path_and_pressure(
+                adj_matrix=adj_matrix,
+                max_time=max_time,
+                time=1,
+                curr_valve_id=g_start_valve_id,
+                open_valve_ids=open_valve_ids,
+                other_players=other_players - 1,
+            )
+        else:
+            return 0, (curr_valve_id,), open_valve_ids
     # If all valves open, stay still.
     full_set = (0x01 << (valve_count)) - 1
     if open_valve_ids == full_set:
@@ -98,6 +119,7 @@ def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve
             time=time + 1,
             curr_valve_id=curr_valve_id,
             open_valve_ids=new_open_ids,
+            other_players=other_players,
         )
         results.append(
             (
@@ -123,6 +145,7 @@ def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve
                 time=time + 1,
                 curr_valve_id=valve_id,
                 open_valve_ids=open_valve_ids,
+                other_players=other_players,
             )
             results.append((result, False))
     # Pick the result with the maximum pressure.
@@ -189,6 +212,9 @@ if __name__ == "__main__":
         action="store",
         default=10,
         help="Experimental cutoff.",
+    )
+    parser.add_argument(
+        "-e", "--elephant", action="store_true", help="Add an elephant helper."
     )
     args = parser.parse_args()
     main(args)

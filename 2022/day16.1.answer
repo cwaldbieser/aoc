@@ -1,0 +1,246 @@
+Valve GV, flow rate: 23
+  - Connects to WO
+Valve TS, flow rate: 0
+  - Connects to IG
+  - Connects to TX
+Valve UC, flow rate: 0
+  - Connects to XJ
+  - Connects to VZ
+Valve TJ, flow rate: 0
+  - Connects to GJ
+  - Connects to YV
+Valve KF, flow rate: 0
+  - Connects to QY
+  - Connects to VP
+Valve PO, flow rate: 0
+  - Connects to YF
+  - Connects to VP
+Valve CV, flow rate: 0
+  - Connects to VB
+  - Connects to QK
+Valve NK, flow rate: 6
+  - Connects to MI
+  - Connects to QY
+  - Connects to DO
+  - Connects to QJ
+  - Connects to YH
+Valve IG, flow rate: 4
+  - Connects to MI
+  - Connects to FP
+  - Connects to OP
+  - Connects to UV
+  - Connects to TS
+Valve KN, flow rate: 0
+  - Connects to RF
+  - Connects to CY
+Valve KR, flow rate: 0
+  - Connects to VP
+  - Connects to DI
+Valve VZ, flow rate: 19
+  - Connects to UC
+Valve MW, flow rate: 0
+  - Connects to UZ
+  - Connects to VB
+Valve LJ, flow rate: 25
+  - Connects to XJ
+  - Connects to LI
+Valve DI, flow rate: 0
+  - Connects to KR
+  - Connects to AA
+Valve TO, flow rate: 12
+  - Connects to TG
+  - Connects to PB
+  - Connects to BZ
+Valve CG, flow rate: 0
+  - Connects to VP
+  - Connects to TX
+Valve GJ, flow rate: 0
+  - Connects to QL
+  - Connects to TJ
+Valve UZ, flow rate: 0
+  - Connects to MW
+  - Connects to VP
+Valve RF, flow rate: 16
+  - Connects to RD
+  - Connects to KN
+  - Connects to AU
+Valve CY, flow rate: 0
+  - Connects to KN
+  - Connects to YV
+Valve AA, flow rate: 0
+  - Connects to UV
+  - Connects to VS
+  - Connects to NB
+  - Connects to XO
+  - Connects to DI
+Valve YV, flow rate: 11
+  - Connects to CY
+  - Connects to PW
+  - Connects to TJ
+Valve VS, flow rate: 0
+  - Connects to QK
+  - Connects to AA
+Valve TX, flow rate: 14
+  - Connects to RM
+  - Connects to CG
+  - Connects to TS
+  - Connects to DM
+  - Connects to YH
+Valve SB, flow rate: 0
+  - Connects to YF
+  - Connects to BZ
+Valve QY, flow rate: 0
+  - Connects to NK
+  - Connects to KF
+Valve PB, flow rate: 0
+  - Connects to HP
+  - Connects to TO
+Valve YF, flow rate: 20
+  - Connects to DM
+  - Connects to SB
+  - Connects to PO
+Valve TG, flow rate: 0
+  - Connects to RM
+  - Connects to TO
+Valve UV, flow rate: 0
+  - Connects to IG
+  - Connects to AA
+Valve XJ, flow rate: 0
+  - Connects to LJ
+  - Connects to UC
+Valve DM, flow rate: 0
+  - Connects to YF
+  - Connects to TX
+Valve PW, flow rate: 0
+  - Connects to YV
+  - Connects to LI
+Valve RD, flow rate: 0
+  - Connects to QL
+  - Connects to RF
+Valve OM, flow rate: 0
+  - Connects to QK
+  - Connects to OP
+Valve RM, flow rate: 0
+  - Connects to TX
+  - Connects to TG
+Valve SH, flow rate: 0
+  - Connects to AU
+  - Connects to HP
+Valve LI, flow rate: 0
+  - Connects to PW
+  - Connects to LJ
+Valve FP, flow rate: 0
+  - Connects to IG
+  - Connects to VB
+Valve BZ, flow rate: 0
+  - Connects to SB
+  - Connects to TO
+Valve DO, flow rate: 0
+  - Connects to NK
+  - Connects to VB
+Valve WO, flow rate: 0
+  - Connects to QK
+  - Connects to GV
+Valve MI, flow rate: 0
+  - Connects to IG
+  - Connects to NK
+Valve QK, flow rate: 10
+  - Connects to VS
+  - Connects to OM
+  - Connects to WO
+  - Connects to CV
+Valve OP, flow rate: 0
+  - Connects to IG
+  - Connects to OM
+Valve AU, flow rate: 0
+  - Connects to SH
+  - Connects to RF
+Valve QJ, flow rate: 0
+  - Connects to NK
+  - Connects to XO
+Valve VP, flow rate: 8
+  - Connects to PO
+  - Connects to CG
+  - Connects to KF
+  - Connects to KR
+  - Connects to UZ
+Valve HP, flow rate: 17
+  - Connects to SH
+  - Connects to PB
+Valve XO, flow rate: 0
+  - Connects to QJ
+  - Connects to AA
+Valve QL, flow rate: 15
+  - Connects to RD
+  - Connects to GJ
+Valve NB, flow rate: 0
+  - Connects to VB
+  - Connects to AA
+Valve VB, flow rate: 7
+  - Connects to DO
+  - Connects to CV
+  - Connects to MW
+  - Connects to NB
+  - Connects to FP
+Valve YH, flow rate: 0
+  - Connects to NK
+  - Connects to TX
+GV: 0
+TS: 1
+UC: 2
+TJ: 3
+KF: 4
+PO: 5
+CV: 6
+NK: 7
+IG: 8
+KN: 9
+KR: 10
+VZ: 11
+MW: 12
+LJ: 13
+DI: 14
+TO: 15
+CG: 16
+GJ: 17
+UZ: 18
+RF: 19
+CY: 20
+AA: 21
+YV: 22
+VS: 23
+TX: 24
+SB: 25
+QY: 26
+PB: 27
+YF: 28
+TG: 29
+UV: 30
+XJ: 31
+DM: 32
+PW: 33
+RD: 34
+OM: 35
+RM: 36
+SH: 37
+LI: 38
+FP: 39
+BZ: 40
+DO: 41
+WO: 42
+MI: 43
+QK: 44
+OP: 45
+AU: 46
+QJ: 47
+VP: 48
+HP: 49
+XO: 50
+QL: 51
+NB: 52
+VB: 53
+YH: 54
+open valves: 0b1010100111011111111111111101110101101110101011001111110
+Max. pressure: 1617
+Path: ['AA', 'DI', 'KR', 'VP*', 'VP', 'PO', 'YF*', 'YF', 'DM', 'TX*', 'TX', 'RM', 'TG', 'TO*', 'TO', 'PB', 'HP*', 'HP', 'SH', 'AU', 'RF*', 'RF', 'RD', 'QL*', 'QL', 'GJ', 'TJ', 'YV*', 'YV', 'TJ']
+open valves: 0b1011111111011111111111111111111111111111101011001111110
