@@ -78,7 +78,7 @@ def calc_path_and_pressure(adj_matrix, max_time, time, curr_valve_id, open_valve
     if time == max_time:
         return 0, (curr_valve_id,), open_valve_ids
     # If all valves open, stay still.
-    full_set = (0x01 << (valve_count + 1)) - 1
+    full_set = (0x01 << (valve_count)) - 1
     if open_valve_ids == full_set:
         return (
             0,
