@@ -35,7 +35,7 @@ def main(args):
     quiet = args.quiet
     max_rocks = args.rocks
     shape_genrator = itertools.cycle(shapes)
-    gas_jets = parse_gas_jets(args.infile)
+    gas_jets = list(parse_gas_jets(args.infile))
     chamber_width = 7
     start_left_off = 2
     start_bottom_off = 3
@@ -44,7 +44,8 @@ def main(args):
     rock_height = 0
     tallest_rock_top = 0
     rock_count = 0
-    for jet in itertools.cycle(gas_jets):
+    height_map = {}
+    for jet_num, jet in itertools.cycle(enumerate(gas_jets)):
         if rock is None:
             rock = next(shape_genrator)
             rock_height = len(rock)
@@ -82,24 +83,119 @@ def main(args):
         else:
             place_rock_in_chamber(chamber, chamber_width, rock, rock_left, rock_bottom)
             if not quiet:
-                print("ROCK COMES TO REST AT ({:6d},{:6d}).".format(rock_left, rock_bottom))
+                print(
+                    "ROCK {} COMES TO REST AT ({:6d},{:6d}).".format(
+                        rock_count + 1, rock_left, rock_bottom
+                    )
+                )
                 plot_object(chamber)
             rock = None
             rock_top = rock_bottom + rock_height
             if rock_top > tallest_rock_top:
                 tallest_rock_top = rock_top
             rock_count += 1
+            height_map[tallest_rock_top] = rock_count
             if rock_count == max_rocks:
                 break
     print("Highest rock at {}.".format(tallest_rock_top))
+    jet_cycle_size = len(gas_jets)
+    print("Jet cycle size:", jet_cycle_size)
+    # plot_object(chamber, segment_size=jet_cycle_size)
+    cycle_size = find_cycle(chamber)
+    cycle_start = find_first_cycle(chamber, cycle_size)
+    print("Cycle start:", cycle_start)
+    print("Cycle size:", cycle_size)
+    rock_cycle_start = height_map[cycle_start]
+    rock_cycle_end = height_map[cycle_start + cycle_size]
+    rock_cycle_size = rock_cycle_end - rock_cycle_start
+    print("Rock number associated with cycle start:", rock_cycle_start)
+    print("Rock number associated with cycle end:", rock_cycle_end)
+    print("Size of cycle in rocks:", rock_cycle_size)
+    # print("- Rock cycle table -")
+    cycle_offset_map = {}
+    for n in range(cycle_size):
+        height = n + cycle_start
+        rockno = height_map.get(height)
+        if rockno is not None:
+            rock_offset = rockno - rock_cycle_start
+            # print("Cycle offset {:8d}: rock offset {:8d}".format(n, rock_offset))
+            cycle_offset_map[rock_offset] = n
+    many_rocks = args.many_rocks
+    if many_rocks is not None:
+        print("Extrapolating for {} rocks ...".format(many_rocks))
+        max_rocks = many_rocks
+    leading_rocks = rock_cycle_start
+    full_cycles = (max_rocks - leading_rocks) // rock_cycle_size
+    print("Full cycles required:", full_cycles)
+    trailing_rocks = max_rocks - (leading_rocks + rock_cycle_size * full_cycles)
+    print("Trailing rocks:", trailing_rocks)
+    trailing_height = cycle_offset_map[trailing_rocks]
+    total_height = cycle_start + cycle_size * full_cycles + trailing_height
+    print("Total height:", total_height)
+    # print("")
+    # print("- Rock cycle DEBUG table -")
+    # for height in range(len(chamber)):
+    #     rockno = height_map.get(height)
+    #     if rockno is not None:
+    #         print("Height {:8d}: rock number {:8d}".format(height, rockno))
 
 
-def plot_object(thing):
+def find_first_cycle(chamber, cycle_size):
+    """
+    Find the first cycle.
+    """
+    segment = chamber[cycle_size:]
+    start_idx0 = None
+    count = 0
+    for rownum, (row, rowahead) in enumerate(zip(chamber, segment)):
+        if row == rowahead:
+            if start_idx0 is None:
+                start_idx0 = rownum
+            count += 1
+            if count == cycle_size:
+                return start_idx0
+        else:
+            start_idx0 = None
+            count = 0
+    return None
+
+
+def find_cycle(chamber):
+    """ "
+    Analyze the chamber.
+    """
+    chamber_size = len(chamber)
+    sample_idx = chamber_size - 10
+    sample = chamber[sample_idx]
+    idx0 = sample_idx
+    start_match = None
+    for idx1 in range(idx0 - 1, 0, -1):
+        row = chamber[idx1]
+        if row == sample:
+            idx0 -= 1
+            if idx0 == start_match:
+                print("Found cycle from {} to {}.".format(start_match, sample_idx))
+                cycle_size = sample_idx - start_match
+                return cycle_size
+            sample = chamber[idx0]
+            if start_match is None:
+                start_match = idx1
+        else:
+            idx0 = sample_idx
+            sample = chamber[idx0]
+            start_match = None
+    return None
+
+
+def plot_object(thing, segment_size=None):
     """
     Plot an object.
     """
     print("")
-    for row in reversed(thing):
+    for n, row in enumerate(reversed(thing)):
+        if segment_size is not None:
+            if n % segment_size == 0:
+                print("-------")
         print(row)
     print("")
 
@@ -188,5 +284,11 @@ if __name__ == "__main__":
         "-r", "--rocks", type=int, default=2022, help="The number of rocks to count."
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Be less chatty.")
+    parser.add_argument(
+        "-m",
+        "--many-rocks",
+        type=int,
+        help="Calculate the height for MANY_ROCKS by extrapolating from the input.",
+    )
     args = parser.parse_args()
     main(args)
