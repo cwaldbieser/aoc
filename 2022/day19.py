@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import collections
 
 
 def main(args):
@@ -8,8 +9,29 @@ def main(args):
     The main function entrypoint.
     """
     blueprints = parse_blueprints(args.infile)
-    for blueprint in blueprints:
-        print(blueprint)
+    blueprints = dict(blueprints)
+    for label, blueprint in blueprints.items():
+        print(label, blueprint)
+    max_time = 24
+    robots = {
+        "ore": 1,
+    }
+    resources = collections.Counter()
+    for minute in range(max_time):
+        print("= Minute {} =".format(minute))
+        harvest_resources(robots, resources)
+        print("")
+    print("= Resources =")
+    print(resources)
+
+
+def harvest_resources(robots, resources):
+    """
+    Harvest resources and updated `resources`.
+    """
+    for resource, qty in robots.items():
+        resources[resource] += qty
+        print("Robots harvested {} units of {}.".format(qty, resource))
 
 
 def parse_blueprints(infile):
