@@ -10,10 +10,86 @@ def main(args):
     """
     blueprints = parse_blueprints(args.infile)
     blueprints = dict(blueprints)
+    max_time = 24
     for label, blueprint in blueprints.items():
         print_heading("Blueprint", "=")
         print_blueprint(label, blueprint)
-        evaluate_blueprint(blueprint)
+        robots = collections.Counter()
+        robots["ore"] = 1
+        resources = collections.Counter()
+        results = evaluate_blueprint(
+            time=1,
+            max_time=max_time,
+            blueprint=blueprint,
+            robots=robots,
+            resources=resources,
+        )
+        print(results)
+        for _, resources in results:
+            print(resources)
+
+
+def evaluate_blueprint(time, max_time, blueprint, robots, resources):
+    """
+    Evaluate a blueprint.
+    """
+    print(
+        "DEBUG time:",
+        time,
+        "max_time:",
+        max_time,
+        "robots:",
+        robots,
+        "resources:",
+        resources,
+    )
+    if time == max_time:
+        return [(robots, resources)]
+    # Choices:
+    # - Only harvest.
+    # - Produce a robot of some type.
+    results = []
+
+    # Harvest
+    new_allocations = harvest_resources(robots, resources)
+
+    # Choose which resource (or no resource) to produce.
+    choices = ["geode", "obsidian", "clay", "ore", None]
+    for restype in choices:
+        if restype is None:
+            new_robots = collections.Counter(robots)
+            new_resources = collections.Counter(resources) + new_allocations
+        else:
+            costs = blueprint[restype]
+            can_produce = True
+            for qty, res in costs:
+                if resources[res] < qty:
+                    can_produce = False
+                    break
+            if not can_produce:
+                continue
+            print("Building robot of type {}.".format(restype))
+            new_robots = robots + collections.Counter({restype: 1})
+            res_adjustment = collections.Counter(dict((res, qty) for qty, res in costs))
+            print("res_adjustment:", res_adjustment)
+            new_resources = resources - res_adjustment + new_allocations
+            print("new_resources:", new_resources)
+        future_results = evaluate_blueprint(
+            time + 1, max_time, blueprint, new_robots, new_resources
+        )
+        results.extend(future_results)
+    return results
+
+
+def harvest_resources(robots, resources):
+    """
+    Harvest resources and updated `resources`.
+    """
+    additional_resources = collections.Counter()
+    for resource, qty in robots.items():
+        additional_resources[resource] += qty
+        print("- Robots harvested {} units of {}.".format(qty, resource))
+    return additional_resources
 
 
 def print_heading(heading, symbol="-"):
@@ -40,124 +116,14 @@ def print_blueprint(label, blueprint):
     print("")
 
 
-def evaluate_blueprint(blueprint):
+def print_counters(title, counters):
     """
-    Evaluate a blueprint.
+    Counters.
     """
-    max_time = 24
-    robots = collections.Counter()
-    robots["ore"] = 1
-    resources = collections.Counter()
-    print_heading("Max. Ratios")
-    for minute in range(1, max_time + 1):
-        heading = "Minute {}".format(minute)
-        print_heading(heading)
-        additional_resources = harvest_resources(robots, resources)
-        print("")
-        invest_resources(minute, blueprint, robots, resources, goal="geode")
-        print("")
-        resources = resources + additional_resources
-        print_heading("Resources", '"')
-        for resource_type, qty in resources.items():
-            print("- {}: {:4}".format(resource_type, qty))
-        print("")
-        print_heading("Robots", '"')
-        for robot_type, qty in robots.items():
-            print("- {}: {:3d}".format(robot_type, qty))
-        print("")
-
-
-def calculate_max_ratios(blueprint):
-    """
-    Calculate the maximum ratios between resource producing robots.
-    """
-    max_ratios = collections.defaultdict(lambda: collections.defaultdict(lambda: 0.0))
-    resources = ["geode", "obsidian", "clay", "ore"]
-    for resource in resources:
-        for costs in blueprint.values():
-            cost_map = dict((cost_type, qty) for qty, cost_type in costs)
-            res_qty = cost_map.get(resource)
-            if res_qty is None:
-                continue
-            ratios = collections.defaultdict(lambda: 0.0)
-            for cost_type, qty in cost_map.items():
-                if cost_type == resource:
-                    continue
-                ratios[cost_type] = res_qty / qty
-            if len(ratios) > 0:
-                max_ratios[resource] = ratios
-    return max_ratios
-
-
-def invest_resources(
-    minute,
-    blueprint,
-    robots,
-    resources,
-    goal,
-    not_achievable=None,
-    level=0,
-    explain_levels=None,
-):
-    """
-    Choose which resources to invest into which robots.
-    """
-    if explain_levels is None:
-        explain_levels = set({})
-    explain = False
-    if level in explain_levels:
-        explain = True
-    if explain:
-        print("- Goal: {}, level: {}".format(goal, level))
-    if not_achievable is None:
-        not_achievable = set({})
-    cost = blueprint[goal]
-    achievable_now = True
-    for qty_required, resource in cost:
-        on_hand = resources[resource]
-        if on_hand < qty_required:
-            achievable_now = False
-            if explain:
-                print("- Cannot achieve goal of creating {} robot.".format(goal))
-                print("- Not enough {} available.".format(resource))
-            if goal == resource:
-                not_achievable = not_achievable | {goal}
-            if resource in not_achievable:
-                if explain:
-                    print("Cannot achieve goal at this time.")
-                continue
-            if explain:
-                print("- Investing in {} ...".format(resource))
-            invest_resources(
-                minute,
-                blueprint,
-                robots,
-                resources,
-                goal=resource,
-                not_achievable=not_achievable | {goal},
-                level=level + 1,
-            )
-    if achievable_now:
-        print("- Creating {} robot.  Allocating resources.".format(goal))
-        for qty_required, resource in cost:
-            resources[resource] -= qty_required
-            print(
-                "- Used {} {}.  {} units of {} remain.".format(
-                    qty_required, resource, resources[resource], resource
-                )
-            )
-        robots[goal] += 1
-
-
-def harvest_resources(robots, resources):
-    """
-    Harvest resources and updated `resources`.
-    """
-    additional_resources = collections.Counter()
-    for resource, qty in robots.items():
-        additional_resources[resource] += qty
-        print("- Robots harvested {} units of {}.".format(qty, resource))
-    return additional_resources
+    print_heading(title, '"')
+    for thing, qty in counters.items():
+        print("- {}: {:4}".format(thing, qty))
+    print("")
 
 
 def parse_blueprints(infile):
