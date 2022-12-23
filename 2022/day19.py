@@ -11,14 +11,16 @@ def main(args):
     blueprints = parse_blueprints(args.infile)
     blueprints = dict(blueprints)
     max_time = 24
-    for bid, (label, blueprint) in enumerate(blueprints.items()):
+    total_quality = 0
+    for label, blueprint in blueprints.items():
+        bid = int(label.split()[-1])
         print_heading("Blueprint", "=")
         print_blueprint(label, blueprint)
         robots = collections.Counter()
         robots["ore"] = 1
         resources = collections.Counter()
         res_caps = calc_resource_caps(blueprint)
-        _, resources = evaluate_blueprint(
+        robots, resources = evaluate_blueprint(
             blueprint_id=bid,
             time=1,
             max_time=max_time,
@@ -28,8 +30,25 @@ def main(args):
             resource_caps=res_caps,
         )
         geodes = resources["geode"]
-        print("Max. geodes:", geodes)
-        break
+        print_counter("Robots", robots)
+        print_counter("Resources", resources)
+        quality = bid * geodes
+        total_quality += quality
+        print("Blueprint quality:", quality)
+        print("")
+    print("Total quality:", total_quality)
+
+
+def print_counter(title, counter):
+    """
+    Print a counter.
+    """
+    print(title)
+    print("-" * len(title))
+    print("")
+    for key in sorted(counter.keys()):
+        print("- {:10}: {:3d}".format(key, counter[key]))
+    print("")
 
 
 def calc_resource_caps(blueprint):
@@ -79,6 +98,8 @@ def memoize(f):
         result = cache.get(key)
         if result is None:
             result = f(**kwds)
+            # if len(cache) > 6_000_000:
+            #     cache.popitem()
             cache[key] = result
             # print("Stored key:", key)
         return result
