@@ -11,7 +11,7 @@ def main(args):
     blueprints = parse_blueprints(args.infile)
     blueprints = dict(blueprints)
     max_time = 24
-    for label, blueprint in blueprints.items():
+    for bid, (label, blueprint) in enumerate(blueprints.items()):
         print_heading("Blueprint", "=")
         print_blueprint(label, blueprint)
         robots = collections.Counter()
@@ -19,6 +19,7 @@ def main(args):
         resources = collections.Counter()
         res_caps = calc_resource_caps(blueprint)
         results = evaluate_blueprint(
+            blueprint_id=bid,
             time=1,
             max_time=max_time,
             blueprint=blueprint,
@@ -26,9 +27,11 @@ def main(args):
             resources=resources,
             resource_caps=res_caps,
         )
-        print(results)
+        max_geodes = 0
         for _, resources in results:
-            print(resources)
+            geodes = resources["geode"]
+            max_geodes = max(max_geodes, geodes)
+        print("Max. geodes:", max_geodes)
 
 
 def calc_resource_caps(blueprint):
@@ -50,8 +53,16 @@ def calc_resource_caps(blueprint):
 def memoize(f):
 
     cache = {}
+    info = {"blueprint_id": None}
 
     def _inner(**kwds):
+
+        bid = kwds["blueprint_id"]
+        blueprint_id = info["blueprint_id"]
+        if bid != blueprint_id:
+            info["blueprint_id"] = bid
+            cache.clear()
+
         key = (
             kwds["time"],
             tuple(kwds["robots"].items()),
@@ -68,7 +79,9 @@ def memoize(f):
 
 
 @memoize
-def evaluate_blueprint(time, max_time, blueprint, robots, resources, resource_caps):
+def evaluate_blueprint(
+    blueprint_id, time, max_time, blueprint, robots, resources, resource_caps
+):
     """
     Evaluate a blueprint.
     """
@@ -118,6 +131,7 @@ def evaluate_blueprint(time, max_time, blueprint, robots, resources, resource_ca
             new_resources = resources - res_adjustment + new_allocations
             # print("new_resources:", new_resources)
         future_results = evaluate_blueprint(
+            blueprint_id=blueprint_id,
             time=time + 1,
             max_time=max_time,
             blueprint=blueprint,
