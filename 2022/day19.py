@@ -18,7 +18,7 @@ def main(args):
         robots["ore"] = 1
         resources = collections.Counter()
         res_caps = calc_resource_caps(blueprint)
-        results = evaluate_blueprint(
+        _, resources = evaluate_blueprint(
             blueprint_id=bid,
             time=1,
             max_time=max_time,
@@ -27,11 +27,9 @@ def main(args):
             resources=resources,
             resource_caps=res_caps,
         )
-        max_geodes = 0
-        for _, resources in results:
-            geodes = resources["geode"]
-            max_geodes = max(max_geodes, geodes)
-        print("Max. geodes:", max_geodes)
+        geodes = resources["geode"]
+        print("Max. geodes:", geodes)
+        break
 
 
 def calc_resource_caps(blueprint):
@@ -63,16 +61,26 @@ def memoize(f):
             info["blueprint_id"] = bid
             cache.clear()
 
-        key = (
-            kwds["time"],
-            tuple(kwds["robots"].items()),
-            tuple(kwds["resources"].items()),
+        robots = kwds["robots"]
+        resources = kwds["resources"]
+        robot_key = (
+            robots["geode"],
+            robots["obsidian"],
+            robots["clay"],
+            robots["ore"],
         )
+        res_key = (
+            resources["geode"],
+            resources["obsidian"],
+            resources["clay"],
+            resources["ore"],
+        )
+        key = (kwds["time"], robot_key, res_key)
         result = cache.get(key)
         if result is None:
             result = f(**kwds)
             cache[key] = result
-            print("Stored key:", key)
+            # print("Stored key:", key)
         return result
 
     return _inner
@@ -96,7 +104,8 @@ def evaluate_blueprint(
     #     resources,
     # )
     if time == max_time:
-        return [(robots, resources)]
+        new_allocations = harvest_resources(robots, resources)
+        return (robots, resources + new_allocations)
     # Choices:
     # - Only harvest.
     # - Produce a robot of some type.
@@ -130,6 +139,17 @@ def evaluate_blueprint(
             # print("res_adjustment:", res_adjustment)
             new_resources = resources - res_adjustment + new_allocations
             # print("new_resources:", new_resources)
+        # Throw away extra resources
+        tmp_resources = collections.Counter()
+        for restype, qty in new_resources.items():
+            cap = resource_caps[restype]
+            if cap != 0:
+                max_qty = resource_caps[restype] * (max_time - time)
+            else:
+                max_qty = qty
+            tmp_resources[restype] = min(max_qty, qty)
+        new_resources = tmp_resources
+        # Get results from the future.
         future_results = evaluate_blueprint(
             blueprint_id=blueprint_id,
             time=time + 1,
@@ -139,7 +159,9 @@ def evaluate_blueprint(
             resources=new_resources,
             resource_caps=resource_caps,
         )
-        results.extend(future_results)
+        results.append(future_results)
+    results.sort(key=lambda result: result[1]["geode"])
+    results = results[-1]
     return results
 
 
