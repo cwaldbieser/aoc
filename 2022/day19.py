@@ -114,29 +114,26 @@ def evaluate_blueprint(
     """
     Evaluate a blueprint.
     """
-    # print(
-    #     "DEBUG time:",
-    #     time,
-    #     "max_time:",
-    #     max_time,
-    #     "robots:",
-    #     robots,
-    #     "resources:",
-    #     resources,
-    # )
     if time == max_time:
         new_allocations = harvest_resources(robots, resources)
         return (robots, resources + new_allocations)
+
     # Choices:
     # - Only harvest.
     # - Produce a robot of some type.
-    results = []
+    winner = collections.Counter(), collections.Counter()
 
     # Harvest
     new_allocations = harvest_resources(robots, resources)
 
     # Choose which resource (or no resource) to produce.
     choices = ["geode", "obsidian", "clay", "ore", None]
+    # No point in producing anything other than geode robots in the 2nd last
+    # round.
+    if time == max_time - 1:
+        choices = ["geode", None]
+    if time == max_time - 2:
+        choices = ["geode", "obsidian", "ore", None]
     for restype in choices:
         if restype is None:
             new_robots = collections.Counter(robots)
@@ -180,10 +177,11 @@ def evaluate_blueprint(
             resources=new_resources,
             resource_caps=resource_caps,
         )
-        results.append(future_results)
-    results.sort(key=lambda result: result[1]["geode"])
-    results = results[-1]
-    return results
+        a0, a1 = winner
+        b0, b1 = future_results
+        if b1["geode"] >= a1["geode"]:
+            winner = future_results
+    return winner
 
 
 def harvest_resources(robots, resources):
