@@ -1,0 +1,1243 @@
+Blueprint
+=========
+
+Blueprint 1: 
++ geode robot
+  -  7 obsidian
+  -  2 ore
++ obsidian robot
+  - 11 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 0
+Cache misses: 0
+Robots
+------
+
+- clay      :   3
+- geode     :   1
+- obsidian  :   3
+- ore       :   1
+
+Resources
+---------
+
+- clay      :  10
+- geode     :   3
+- obsidian  :  10
+- ore       :   4
+
+Blueprint quality: 3
+
+Blueprint
+=========
+
+Blueprint 2: 
++ geode robot
+  -  8 obsidian
+  -  2 ore
++ obsidian robot
+  - 20 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 358144
+Cache misses: 1149818
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 3: 
++ geode robot
+  - 16 obsidian
+  -  4 ore
++ obsidian robot
+  - 15 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 519157
+Cache misses: 1593587
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 4: 
++ geode robot
+  - 16 obsidian
+  -  3 ore
++ obsidian robot
+  - 15 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 1468218
+Cache misses: 4017010
+Robots
+------
+
+- clay      :   8
+- geode     :   1
+- obsidian  :   4
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  41
+- geode     :   2
+- obsidian  :  12
+- ore       :  33
+
+Blueprint quality: 8
+
+Blueprint
+=========
+
+Blueprint 5: 
++ geode robot
+  -  7 obsidian
+  -  3 ore
++ obsidian robot
+  -  8 clay
+  -  4 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 4909025
+Cache misses: 11439150
+Robots
+------
+
+- clay      :   2
+- geode     :   2
+- obsidian  :   2
+- ore       :   1
+
+Resources
+---------
+
+- clay      :  20
+- geode     :   9
+- obsidian  :   8
+- ore       :   4
+
+Blueprint quality: 45
+
+Blueprint
+=========
+
+Blueprint 6: 
++ geode robot
+  -  8 obsidian
+  -  3 ore
++ obsidian robot
+  - 18 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 6304956
+Cache misses: 15790910
+Robots
+------
+
+- clay      :   7
+- geode     :   1
+- obsidian  :   2
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  49
+- geode     :   2
+- obsidian  :   6
+- ore       :  29
+
+Blueprint quality: 12
+
+Blueprint
+=========
+
+Blueprint 7: 
++ geode robot
+  - 15 obsidian
+  -  3 ore
++ obsidian robot
+  - 20 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 6992935
+Cache misses: 17595667
+Robots
+------
+
+- clay      :   7
+- geode     :   1
+- obsidian  :   3
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  36
+- geode     :   1
+- obsidian  :   6
+- ore       :  39
+
+Blueprint quality: 7
+
+Blueprint
+=========
+
+Blueprint 8: 
++ geode robot
+  - 20 obsidian
+  -  3 ore
++ obsidian robot
+  - 15 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 9035404
+Cache misses: 22288560
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 9: 
++ geode robot
+  -  9 obsidian
+  -  4 ore
++ obsidian robot
+  - 14 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 9984465
+Cache misses: 24711983
+Robots
+------
+
+- clay      :   7
+- geode     :   2
+- obsidian  :   5
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  28
+- geode     :   6
+- obsidian  :  15
+- ore       :  25
+
+Blueprint quality: 54
+
+Blueprint
+=========
+
+Blueprint 10: 
++ geode robot
+  - 15 obsidian
+  -  3 ore
++ obsidian robot
+  -  9 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 13812142
+Cache misses: 33847653
+Robots
+------
+
+- clay      :   5
+- geode     :   1
+- obsidian  :   4
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  21
+- geode     :   1
+- obsidian  :   8
+- ore       :   7
+
+Blueprint quality: 10
+
+Blueprint
+=========
+
+Blueprint 11: 
++ geode robot
+  -  9 obsidian
+  -  3 ore
++ obsidian robot
+  -  9 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 14325844
+Cache misses: 35350773
+Cache hits: 20551930
+Cache misses: 53350797
+Cache cleared.
+Cache hits: 26949412
+Cache misses: 71350798
+Cache cleared.
+Cache hits: 32843870
+Cache misses: 89350799
+Cache cleared.
+Cache hits: 39363547
+Cache misses: 107350799
+Cache cleared.
+Cache hits: 46022118
+Cache misses: 125350800
+Cache cleared.
+Cache hits: 52367817
+Cache misses: 143350803
+Cache cleared.
+Cache hits: 58977514
+Cache misses: 161350803
+Cache cleared.
+Cache hits: 65876613
+Cache misses: 179350802
+Cache cleared.
+Robots
+------
+
+- clay      :   6
+- geode     :   4
+- obsidian  :   7
+- ore       :   3
+
+Resources
+---------
+
+- clay      :  30
+- geode     :  15
+- obsidian  :  18
+- ore       :   9
+
+Blueprint quality: 165
+
+Blueprint
+=========
+
+Blueprint 12: 
++ geode robot
+  - 14 obsidian
+  -  3 ore
++ obsidian robot
+  - 16 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 72421817
+Cache misses: 196277969
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 13: 
++ geode robot
+  - 10 obsidian
+  -  2 ore
++ obsidian robot
+  -  6 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 73264083
+Cache misses: 198464985
+Robots
+------
+
+- clay      :   5
+- geode     :   3
+- obsidian  :   6
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  29
+- geode     :   9
+- obsidian  :  14
+- ore       :  24
+
+Blueprint quality: 117
+
+Blueprint
+=========
+
+Blueprint 14: 
++ geode robot
+  -  8 obsidian
+  -  3 ore
++ obsidian robot
+  -  7 clay
+  -  2 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 77396661
+Cache misses: 209173102
+Robots
+------
+
+- clay      :   2
+- geode     :   3
+- obsidian  :   3
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  16
+- geode     :  11
+- obsidian  :   7
+- ore       :   8
+
+Blueprint quality: 154
+
+Blueprint
+=========
+
+Blueprint 15: 
++ geode robot
+  - 16 obsidian
+  -  3 ore
++ obsidian robot
+  - 17 clay
+  -  2 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 79588708
+Cache misses: 215911549
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 16: 
++ geode robot
+  - 17 obsidian
+  -  4 ore
++ obsidian robot
+  - 15 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 80052516
+Cache misses: 217253113
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 17: 
++ geode robot
+  -  7 obsidian
+  -  3 ore
++ obsidian robot
+  -  9 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 80264571
+Cache misses: 217904179
+Robots
+------
+
+- clay      :   4
+- geode     :   3
+- obsidian  :   4
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  26
+- geode     :  12
+- obsidian  :  13
+- ore       :   8
+
+Blueprint quality: 204
+
+Blueprint
+=========
+
+Blueprint 18: 
++ geode robot
+  - 19 obsidian
+  -  3 ore
++ obsidian robot
+  -  8 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 84771348
+Cache misses: 230834492
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 19: 
++ geode robot
+  - 15 obsidian
+  -  4 ore
++ obsidian robot
+  - 19 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 85317277
+Cache misses: 232409149
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 20: 
++ geode robot
+  - 19 obsidian
+  -  3 ore
++ obsidian robot
+  - 14 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 85485718
+Cache misses: 232888587
+Robots
+------
+
+- clay      :   7
+- geode     :   1
+- obsidian  :   5
+- ore       :   3
+
+Resources
+---------
+
+- clay      :  35
+- geode     :   3
+- obsidian  :  18
+- ore       :  21
+
+Blueprint quality: 60
+
+Blueprint
+=========
+
+Blueprint 21: 
++ geode robot
+  -  7 obsidian
+  -  3 ore
++ obsidian robot
+  - 15 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 92582676
+Cache misses: 246538811
+Robots
+------
+
+- clay      :   5
+- geode     :   1
+- obsidian  :   3
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  20
+- geode     :   3
+- obsidian  :  10
+- ore       :  39
+
+Blueprint quality: 63
+
+Blueprint
+=========
+
+Blueprint 22: 
++ geode robot
+  - 16 obsidian
+  -  2 ore
++ obsidian robot
+  -  7 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 93542526
+Cache misses: 249149627
+Robots
+------
+
+- clay      :   3
+- geode     :   1
+- obsidian  :   4
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  12
+- geode     :   1
+- obsidian  :   8
+- ore       :   8
+
+Blueprint quality: 22
+
+Blueprint
+=========
+
+Blueprint 23: 
++ geode robot
+  - 14 obsidian
+  -  2 ore
++ obsidian robot
+  -  7 clay
+  -  2 ore
++ clay robot
+  -  2 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 94206484
+Cache misses: 251000414
+Cache hits: 100582007
+Cache misses: 269000439
+Cache cleared.
+Cache hits: 106948006
+Cache misses: 287000440
+Cache cleared.
+Cache hits: 112779585
+Cache misses: 305000440
+Cache cleared.
+Cache hits: 119058263
+Cache misses: 323000440
+Cache cleared.
+Cache hits: 125461754
+Cache misses: 341000443
+Cache cleared.
+Cache hits: 132436484
+Cache misses: 359000444
+Cache cleared.
+Cache hits: 139514809
+Cache misses: 377000444
+Cache cleared.
+Cache hits: 146082936
+Cache misses: 395000444
+Cache cleared.
+Cache hits: 152026335
+Cache misses: 413000447
+Cache cleared.
+Cache hits: 158113935
+Cache misses: 431000447
+Cache cleared.
+Cache hits: 164571583
+Cache misses: 449000447
+Cache cleared.
+Cache hits: 171504539
+Cache misses: 467000448
+Cache cleared.
+Cache hits: 178519829
+Cache misses: 485000450
+Cache cleared.
+Cache hits: 185383963
+Cache misses: 503000451
+Cache cleared.
+Cache hits: 192692920
+Cache misses: 521000452
+Cache cleared.
+Cache hits: 198476068
+Cache misses: 539000453
+Cache cleared.
+Cache hits: 204177084
+Cache misses: 557000455
+Cache cleared.
+Cache hits: 209862874
+Cache misses: 575000454
+Cache cleared.
+Cache hits: 216017567
+Cache misses: 593000457
+Cache cleared.
+Cache hits: 222271709
+Cache misses: 611000454
+Cache cleared.
+Cache hits: 228718201
+Cache misses: 629000459
+Cache cleared.
+Cache hits: 234523353
+Cache misses: 647000459
+Cache cleared.
+Cache hits: 241189780
+Cache misses: 665000460
+Cache cleared.
+Cache hits: 248273041
+Cache misses: 683000460
+Cache cleared.
+Cache hits: 254909872
+Cache misses: 701000463
+Cache cleared.
+Cache hits: 261662187
+Cache misses: 719000464
+Cache cleared.
+Cache hits: 268741010
+Cache misses: 737000465
+Cache cleared.
+Cache hits: 275241261
+Cache misses: 755000465
+Cache cleared.
+Cache hits: 282238280
+Cache misses: 773000466
+Cache cleared.
+Cache hits: 289656414
+Cache misses: 791000467
+Cache cleared.
+Cache hits: 296624702
+Cache misses: 809000469
+Cache cleared.
+Cache hits: 303493168
+Cache misses: 827000467
+Cache cleared.
+Cache hits: 310915470
+Cache misses: 845000470
+Cache cleared.
+Cache hits: 317936349
+Cache misses: 863000471
+Cache cleared.
+Cache hits: 324434090
+Cache misses: 881000473
+Cache cleared.
+Cache hits: 331067974
+Cache misses: 899000474
+Cache cleared.
+Cache hits: 337201618
+Cache misses: 917000475
+Cache cleared.
+Cache hits: 343937287
+Cache misses: 935000476
+Cache cleared.
+Cache hits: 351181148
+Cache misses: 953000477
+Cache cleared.
+Cache hits: 357836333
+Cache misses: 971000478
+Cache cleared.
+Cache hits: 364304884
+Cache misses: 989000476
+Cache cleared.
+Cache hits: 370447969
+Cache misses: 1007000480
+Cache cleared.
+Cache hits: 377182127
+Cache misses: 1025000478
+Cache cleared.
+Cache hits: 384432554
+Cache misses: 1043000482
+Cache cleared.
+Cache hits: 391369567
+Cache misses: 1061000483
+Cache cleared.
+Cache hits: 398956740
+Cache misses: 1079000481
+Cache cleared.
+Cache hits: 404713092
+Cache misses: 1097000485
+Cache cleared.
+Cache hits: 410423745
+Cache misses: 1115000485
+Cache cleared.
+Cache hits: 416115557
+Cache misses: 1133000487
+Cache cleared.
+Cache hits: 422264662
+Cache misses: 1151000483
+Cache cleared.
+Cache hits: 428517723
+Cache misses: 1169000488
+Cache cleared.
+Cache hits: 434964654
+Cache misses: 1187000489
+Cache cleared.
+Cache hits: 440769884
+Cache misses: 1205000491
+Cache cleared.
+Cache hits: 447436311
+Cache misses: 1223000492
+Cache cleared.
+Cache hits: 454519570
+Cache misses: 1241000492
+Cache cleared.
+Cache hits: 461156401
+Cache misses: 1259000492
+Cache cleared.
+Cache hits: 467908715
+Cache misses: 1277000495
+Cache cleared.
+Cache hits: 474987538
+Cache misses: 1295000496
+Cache cleared.
+Cache hits: 481487789
+Cache misses: 1313000496
+Cache cleared.
+Cache hits: 488484808
+Cache misses: 1331000497
+Cache cleared.
+Cache hits: 495902942
+Cache misses: 1349000498
+Cache cleared.
+Cache hits: 502871230
+Cache misses: 1367000500
+Cache cleared.
+Cache hits: 509739696
+Cache misses: 1385000498
+Cache cleared.
+Cache hits: 517161998
+Cache misses: 1403000501
+Cache cleared.
+Cache hits: 524343082
+Cache misses: 1421000502
+Cache cleared.
+Cache hits: 531334955
+Cache misses: 1439000503
+Cache cleared.
+Cache hits: 537524003
+Cache misses: 1457000502
+Cache cleared.
+Cache hits: 544439920
+Cache misses: 1475000505
+Cache cleared.
+Cache hits: 551711070
+Cache misses: 1493000505
+Cache cleared.
+Cache hits: 559176276
+Cache misses: 1511000506
+Cache cleared.
+Cache hits: 565543354
+Cache misses: 1529000509
+Cache cleared.
+Cache hits: 572711363
+Cache misses: 1547000510
+Cache cleared.
+Cache hits: 580183684
+Cache misses: 1565000510
+Cache cleared.
+Cache hits: 587646798
+Cache misses: 1583000508
+Cache cleared.
+Cache hits: 595377290
+Cache misses: 1601000508
+Cache cleared.
+Robots
+------
+
+- clay      :   6
+- geode     :   4
+- obsidian  :   7
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  49
+- geode     :  16
+- obsidian  :  14
+- ore       :   8
+
+Blueprint quality: 368
+
+Blueprint
+=========
+
+Blueprint 24: 
++ geode robot
+  - 19 obsidian
+  -  3 ore
++ obsidian robot
+  - 19 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 598788053
+Cache misses: 1609279176
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 25: 
++ geode robot
+  - 14 obsidian
+  -  3 ore
++ obsidian robot
+  - 11 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 600040216
+Cache misses: 1612319902
+Cache hits: 608493237
+Cache misses: 1630319927
+Cache cleared.
+Robots
+------
+
+- clay      :   8
+- geode     :   2
+- obsidian  :   6
+- ore       :   3
+
+Resources
+---------
+
+- clay      :  41
+- geode     :   7
+- obsidian  :  20
+- ore       :  12
+
+Blueprint quality: 175
+
+Blueprint
+=========
+
+Blueprint 26: 
++ geode robot
+  -  9 obsidian
+  -  3 ore
++ obsidian robot
+  -  7 clay
+  -  3 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 616312073
+Cache misses: 1646418599
+Robots
+------
+
+- clay      :   4
+- geode     :   3
+- obsidian  :   4
+- ore       :   2
+
+Resources
+---------
+
+- clay      :  29
+- geode     :   9
+- obsidian  :   8
+- ore       :   6
+
+Blueprint quality: 234
+
+Blueprint
+=========
+
+Blueprint 27: 
++ geode robot
+  -  9 obsidian
+  -  2 ore
++ obsidian robot
+  - 16 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 618235114
+Cache misses: 1651911135
+Robots
+------
+
+- clay      :   7
+- geode     :   2
+- obsidian  :   4
+- ore       :   5
+
+Resources
+---------
+
+- clay      :  34
+- geode     :   5
+- obsidian  :   9
+- ore       :  36
+
+Blueprint quality: 135
+
+Blueprint
+=========
+
+Blueprint 28: 
++ geode robot
+  - 11 obsidian
+  -  4 ore
++ obsidian robot
+  - 19 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Cache hits: 621261278
+Cache misses: 1659101414
+Robots
+------
+
+- ore       :   1
+
+Resources
+---------
+
+- ore       :  24
+
+Blueprint quality: 0
+
+Blueprint
+=========
+
+Blueprint 29: 
++ geode robot
+  - 10 obsidian
+  -  2 ore
++ obsidian robot
+  -  5 clay
+  -  2 ore
++ clay robot
+  -  3 ore
++ ore robot
+  -  4 ore
+
+Cache hits: 621897764
+Cache misses: 1660752905
+Robots
+------
+
+- clay      :   2
+- geode     :   3
+- obsidian  :   4
+- ore       :   1
+
+Resources
+---------
+
+- clay      :  17
+- geode     :  15
+- obsidian  :  14
+- ore       :   4
+
+Blueprint quality: 435
+
+Blueprint
+=========
+
+Blueprint 30: 
++ geode robot
+  - 17 obsidian
+  -  2 ore
++ obsidian robot
+  - 20 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  2 ore
+
+Cache hits: 625414084
+Cache misses: 1671019385
+Robots
+------
+
+- clay      :  10
+- geode     :   1
+- obsidian  :   4
+- ore       :   4
+
+Resources
+---------
+
+- clay      :  41
+- geode     :   1
+- obsidian  :   8
+- ore       :  22
+
+Blueprint quality: 30
+
+Total quality: 2301

@@ -71,12 +71,15 @@ def memoize(f):
 
     cache = {}
     info = {"blueprint_id": None}
+    stats = collections.Counter()
 
     def _inner(**kwds):
 
         bid = kwds["blueprint_id"]
         blueprint_id = info["blueprint_id"]
         if bid != blueprint_id:
+            print("Cache hits:", stats["hits"])
+            print("Cache misses:", stats["misses"])
             info["blueprint_id"] = bid
             cache.clear()
 
@@ -97,11 +100,17 @@ def memoize(f):
         key = (kwds["time"], robot_key, res_key)
         result = cache.get(key)
         if result is None:
+            stats["misses"] += 1
             result = f(**kwds)
-            # if len(cache) > 6_000_000:
-            #     cache.popitem()
+            if len(cache) > 18_000_000:
+                print("Cache hits:", stats["hits"])
+                print("Cache misses:", stats["misses"])
+                cache.clear()
+                print("Cache cleared.")
             cache[key] = result
             # print("Stored key:", key)
+        else:
+            stats["hits"] += 1
         return result
 
     return _inner
@@ -181,6 +190,10 @@ def evaluate_blueprint(
         b0, b1 = future_results
         if b1["geode"] >= a1["geode"]:
             winner = future_results
+        # If you can build a geode robot, do it.
+        # No reason to try other paths.
+        if restype == "geode":
+            break
     return winner
 
 
