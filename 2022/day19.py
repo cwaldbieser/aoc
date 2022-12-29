@@ -187,23 +187,24 @@ def evaluate_blueprint(
             new_resources = resources - res_adjustment + new_allocations
             # print("new_resources:", new_resources)
         # Throw away extra resources
-        # tmp_resources = collections.Counter()
-        # for restype, qty in new_resources.items():
-        #     cap = resource_caps[restype]
-        #     if cap != 0:
-        #         max_qty = resource_caps[restype] * (max_time - time)
-        #     else:
-        #         max_qty = qty
-        #     tmp_resources[restype] = min(max_qty, qty)
-        # new_resources = tmp_resources
+        tmp_resources = collections.Counter()
+        for res, qty in new_resources.items():
+            cap = resource_caps[res]
+            if cap != 0:
+                max_qty = resource_caps[res] * (max_time - time)
+            else:
+                max_qty = qty
+            tmp_resources[res] = min(max_qty, qty)
+        new_resources = tmp_resources
         # Get results from the future.
         bitmap = 0b000
-        if restype != "ore" and possible_map.get("ore", False):
-            bitmap |= 0b001
-        if restype != "clay" and possible_map.get("clay", False):
-            bitmap |= 0b001
-        if restype != "obsidian" and possible_map.get("obsidian", False):
-            bitmap |= 0b001
+        if restype is None:
+            if possible_map.get("ore", False):
+                bitmap |= 0b001
+            if possible_map.get("clay", False):
+                bitmap |= 0b001
+            if possible_map.get("obsidian", False):
+                bitmap |= 0b001
         future_results = evaluate_blueprint(
             blueprint_id=blueprint_id,
             time=time + 1,
