@@ -28,6 +28,7 @@ def main(args):
             robots=robots,
             resources=resources,
             resource_caps=res_caps,
+            earlier_optimization=0b000,
         )
         geodes = resources["geode"]
         print_counter("Robots", robots)
@@ -97,7 +98,8 @@ def memoize(f):
             resources["clay"],
             resources["ore"],
         )
-        key = (kwds["time"], robot_key, res_key)
+        earlier_optimization = kwds["earlier_optimization"]
+        key = (kwds["time"], robot_key, res_key, earlier_optimization)
         result = cache.get(key)
         if result is None:
             stats["misses"] += 1
@@ -118,22 +120,28 @@ def memoize(f):
 
 @memoize
 def evaluate_blueprint(
-    blueprint_id, time, max_time, blueprint, robots, resources, resource_caps
+    blueprint_id,
+    time,
+    max_time,
+    blueprint,
+    robots,
+    resources,
+    resource_caps,
+    earlier_optimization,
 ):
     """
     Evaluate a blueprint.
     """
+    # Harvest
+    new_allocations = harvest_resources(robots, resources)
+
     if time == max_time:
-        new_allocations = harvest_resources(robots, resources)
         return (robots, resources + new_allocations)
 
     # Choices:
-    # - Only harvest.
+    # - Wait.
     # - Produce a robot of some type.
     winner = collections.Counter(), collections.Counter()
-
-    # Harvest
-    new_allocations = harvest_resources(robots, resources)
 
     # Choose which resource (or no resource) to produce.
     choices = ["geode", "obsidian", "clay", "ore", None]
@@ -143,6 +151,16 @@ def evaluate_blueprint(
         choices = ["geode", None]
     if time == max_time - 2:
         choices = ["geode", "obsidian", "ore", None]
+    # Determine which paths are possible.
+    possible_map = {}
+    for restype in choices[:-1]:
+        possible_map[restype] = True
+        costs = blueprint[restype]
+        for qty, res in costs:
+            if resources[res] < qty:
+                possible_map[restype] = False
+                break
+    # Try each path ...
     for restype in choices:
         if restype is None:
             new_robots = collections.Counter(robots)
@@ -153,12 +171,14 @@ def evaluate_blueprint(
                 # We've maxed out this resource production.
                 continue
             costs = blueprint[restype]
-            can_produce = True
-            for qty, res in costs:
-                if resources[res] < qty:
-                    can_produce = False
-                    break
+            can_produce = possible_map[restype]
             if not can_produce:
+                continue
+            if restype == "ore" and (earlier_optimization & 0x001) != 0:
+                continue
+            if restype == "clay" and (earlier_optimization & 0x010) != 0:
+                continue
+            if restype == "obsidian" and (earlier_optimization & 0x100) != 0:
                 continue
             # print("Building robot of type {}.".format(restype))
             new_robots = robots + collections.Counter({restype: 1})
@@ -167,16 +187,23 @@ def evaluate_blueprint(
             new_resources = resources - res_adjustment + new_allocations
             # print("new_resources:", new_resources)
         # Throw away extra resources
-        tmp_resources = collections.Counter()
-        for restype, qty in new_resources.items():
-            cap = resource_caps[restype]
-            if cap != 0:
-                max_qty = resource_caps[restype] * (max_time - time)
-            else:
-                max_qty = qty
-            tmp_resources[restype] = min(max_qty, qty)
-        new_resources = tmp_resources
+        # tmp_resources = collections.Counter()
+        # for restype, qty in new_resources.items():
+        #     cap = resource_caps[restype]
+        #     if cap != 0:
+        #         max_qty = resource_caps[restype] * (max_time - time)
+        #     else:
+        #         max_qty = qty
+        #     tmp_resources[restype] = min(max_qty, qty)
+        # new_resources = tmp_resources
         # Get results from the future.
+        bitmap = 0b000
+        if restype != "ore" and possible_map.get("ore", False):
+            bitmap |= 0b001
+        if restype != "clay" and possible_map.get("clay", False):
+            bitmap |= 0b001
+        if restype != "obsidian" and possible_map.get("obsidian", False):
+            bitmap |= 0b001
         future_results = evaluate_blueprint(
             blueprint_id=blueprint_id,
             time=time + 1,
@@ -185,6 +212,7 @@ def evaluate_blueprint(
             robots=new_robots,
             resources=new_resources,
             resource_caps=resource_caps,
+            earlier_optimization=bitmap,
         )
         a0, a1 = winner
         b0, b1 = future_results
