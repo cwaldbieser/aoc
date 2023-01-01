@@ -8,11 +8,16 @@ def main(args):
     """
     The main function entrypoint.
     """
+    max_time = args.max_time
+    max_blueprints = args.max_blueprints
+    no_quality = args.no_quality
     blueprints = parse_blueprints(args.infile)
     blueprints = dict(blueprints)
-    max_time = 24
     total_quality = 0
-    for label, blueprint in blueprints.items():
+    geode_product = 1
+    for bpnum, (label, blueprint) in enumerate(blueprints.items()):
+        if max_blueprints is not None and bpnum == max_blueprints:
+            break
         bid = int(label.split()[-1])
         print_heading("Blueprint", "=")
         print_blueprint(label, blueprint)
@@ -35,9 +40,13 @@ def main(args):
         print_counter("Resources", resources)
         quality = bid * geodes
         total_quality += quality
-        print("Blueprint quality:", quality)
+        geode_product *= geodes
+        if not no_quality:
+            print("Blueprint quality:", quality)
         print("")
-    print("Total quality:", total_quality)
+    if not no_quality:
+        print("Total quality:", total_quality)
+    print("Geode product:", geode_product)
 
 
 def print_counter(title, counter):
@@ -326,6 +335,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Advent of Code 2022, day 19")
     parser.add_argument(
         "infile", type=argparse.FileType("r"), action="store", help="The input file."
+    )
+    parser.add_argument("-t", "--max-time", type=int, default=24, help="Maximum time.")
+    parser.add_argument("-b", "--max-blueprints", type=int, help="Max. blueprints.")
+    parser.add_argument(
+        "--no-quality", action="store_true", help="Don't show quality levels."
     )
     args = parser.parse_args()
     main(args)
