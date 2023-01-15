@@ -113,56 +113,6 @@ def calc_resource_caps(blueprint):
     return caps
 
 
-def memoize(f):
-
-    cache = {}
-    info = {"blueprint_id": None}
-    stats = collections.Counter()
-
-    def _inner(**kwds):
-
-        bid = kwds["blueprint_id"]
-        blueprint_id = info["blueprint_id"]
-        if bid != blueprint_id:
-            print("Cache hits:", stats["hits"])
-            print("Cache misses:", stats["misses"])
-            info["blueprint_id"] = bid
-            cache.clear()
-
-        robots = kwds["robots"]
-        resources = kwds["resources"]
-        robot_key = (
-            robots["geode"],
-            robots["obsidian"],
-            robots["clay"],
-            robots["ore"],
-        )
-        res_key = (
-            resources["geode"],
-            resources["obsidian"],
-            resources["clay"],
-            resources["ore"],
-        )
-        earlier_optimization = kwds["earlier_optimization"]
-        key = (kwds["time"], robot_key, res_key, earlier_optimization)
-        result = cache.get(key)
-        if result is None:
-            stats["misses"] += 1
-            result = f(**kwds)
-            if len(cache) > 18_000_000:
-                print("Cache hits:", stats["hits"])
-                print("Cache misses:", stats["misses"])
-                cache.clear()
-                print("Cache cleared.")
-            cache[key] = result
-            # print("Stored key:", key)
-        else:
-            stats["hits"] += 1
-        return result
-
-    return _inner
-
-
 def evaluate_blueprint(
     cache,
     blueprint_id,
@@ -177,18 +127,6 @@ def evaluate_blueprint(
     """
     Evaluate a blueprint.
     """
-    # print(
-    #     "time:",
-    #     time,
-    #     ", max_time:",
-    #     max_time,
-    #     ", robots:",
-    #     robots,
-    #     ", resources:",
-    #     resources,
-    #     ", earlier_optimization:",
-    #     earlier_optimization,
-    # )
     cache_key = (time, tuple(robots), tuple(resources), earlier_optimization)
     cached = cache.get(cache_key)
     if cached is not None:
@@ -218,7 +156,6 @@ def evaluate_blueprint(
         choices = [3, None]
     if time == max_time - 2:
         choices = [3, 2, 0, None]
-    # print("Path choices are:", choices)
     # Determine which paths are possible.
     possible_lst = [False, False, False, False]
     for restype in choices[:-1]:
@@ -228,7 +165,6 @@ def evaluate_blueprint(
             if resources[res_idx] < qty:
                 possible_lst[restype] = False
                 break
-    # print("Possible paths are:", possible_map)
     # Try each path ...
     for restype in choices:
         # print("Path is:", restype)
@@ -256,7 +192,6 @@ def evaluate_blueprint(
             new_resources = list(
                 a - b + c for a, b, c in zip(resources, costs, new_allocations)
             )
-        # print("new_resources:", new_resources)
         # Throw away extra resources
         tmp_resources = []
         for qty, cap in zip(new_resources, resource_caps):
@@ -266,7 +201,6 @@ def evaluate_blueprint(
                 max_qty = qty
             tmp_resources.append(min(max_qty, qty))
         new_resources = tmp_resources
-        # print("new_resources after extra trimming:", new_resources)
         # Get results from the future.
         bitmap = 0b000
         if restype is None:
@@ -276,7 +210,6 @@ def evaluate_blueprint(
                 bitmap |= 0b010
             if possible_lst[2]:
                 bitmap |= 0b100
-        # print("Earlier optimization bitmap:", earlier_optimization)
         future_results = evaluate_blueprint(
             cache=cache,
             blueprint_id=blueprint_id,
@@ -296,8 +229,6 @@ def evaluate_blueprint(
         # No reason to try other paths.
         if restype == 3:
             break
-    # print("Geode winner:", winner)
-    # print("")
     if len(cache) == 35_776_709:
         cache.clear()
     cache[cache_key] = winner
