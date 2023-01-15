@@ -21,21 +21,33 @@ def main(args):
         bid = int(label.split()[-1])
         print_heading("Blueprint", "=")
         print_blueprint(label, blueprint)
-        robots = collections.Counter()
-        robots["ore"] = 1
-        resources = collections.Counter()
+        robots = [1, 0, 0, 0]
+        resources = [0, 0, 0, 0]
         res_caps = calc_resource_caps(blueprint)
-        robots, resources = evaluate_blueprint(
-            blueprint_id=bid,
-            time=1,
-            max_time=max_time,
-            blueprint=blueprint,
-            robots=robots,
-            resources=resources,
-            resource_caps=res_caps,
-            earlier_optimization=0b000,
+        res_caps_tuple = (
+            res_caps["ore"],
+            res_caps["clay"],
+            res_caps["obsidian"],
+            res_caps["geode"],
         )
-        geodes = resources["geode"]
+        optimized_blueprint = blueprint_to_tuple(blueprint)
+        cache = {}
+        try:
+            robots, resources = evaluate_blueprint(
+                cache=cache,
+                blueprint_id=bid,
+                time=1,
+                max_time=max_time,
+                blueprint=optimized_blueprint,
+                robots=robots,
+                resources=resources,
+                resource_caps=res_caps_tuple,
+                earlier_optimization=0b000,
+            )
+        except KeyboardInterrupt:
+            print("Cache size:", len(cache))
+            raise
+        geodes = resources[3]
         print_counter("Robots", robots)
         print_counter("Resources", resources)
         quality = bid * geodes
@@ -49,6 +61,29 @@ def main(args):
     print("Geode product:", geode_product)
 
 
+def blueprint_to_tuple(blueprint):
+    """
+    Convert blueprint format.
+    Original format: b[robot_type] -> [(qty, resource_type), ...]
+    New format:
+        (
+            (o1, c, o2, g),
+            (o1, c, o2, g),
+            (o1, c, o2, g),
+            (o1, c, o2, g),
+        )
+    """
+    robot_recipies = []
+    for robot_type in ("ore", "clay", "obsidian", "geode"):
+        resources_map = dict((rtype, qty) for qty, rtype in blueprint[robot_type])
+        resources = []
+        for resource_type in ("ore", "clay", "obsidian", "geode"):
+            resources.append(resources_map.get(resource_type, 0))
+        robot_recipies.append(tuple(resources))
+    robot_recipies = tuple(robot_recipies)
+    return robot_recipies
+
+
 def print_counter(title, counter):
     """
     Print a counter.
@@ -56,8 +91,9 @@ def print_counter(title, counter):
     print(title)
     print("-" * len(title))
     print("")
-    for key in sorted(counter.keys()):
-        print("- {:10}: {:3d}".format(key, counter[key]))
+    keys = ["ore", "clay", "obsidian", "geode"]
+    for key, qty in zip(keys, counter):
+        print("- {:10}: {:3d}".format(key, qty))
     print("")
 
 
@@ -127,8 +163,8 @@ def memoize(f):
     return _inner
 
 
-@memoize
 def evaluate_blueprint(
+    cache,
     blueprint_id,
     time,
     max_time,
@@ -153,87 +189,96 @@ def evaluate_blueprint(
     #     ", earlier_optimization:",
     #     earlier_optimization,
     # )
+    cache_key = (time, tuple(robots), tuple(resources), earlier_optimization)
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
     # Harvest
     new_allocations = harvest_resources(robots, resources)
 
     if time == max_time:
-        rval = (robots, resources + new_allocations)
+        rval = (robots, list(a + b for a, b in zip(resources, new_allocations)))
         # print("Max time reached.  Returning:", rval)
+        if len(cache) == 35_776_709:
+            cache.clear()
+        cache[cache_key] = rval
         return rval
 
     # Choices:
     # - Wait.
     # - Produce a robot of some type.
-    winner = collections.Counter(), collections.Counter()
+    winner = [0, 0, 0, 0], [0, 0, 0, 0]
 
     # Choose which resource (or no resource) to produce.
-    choices = ["geode", "obsidian", "clay", "ore", None]
+    choices = [3, 2, 1, 0, None]
     # No point in producing anything other than geode robots in the 2nd last
     # round.
     if time == max_time - 1:
-        choices = ["geode", None]
+        choices = [3, None]
     if time == max_time - 2:
-        choices = ["geode", "obsidian", "ore", None]
+        choices = [3, 2, 0, None]
     # print("Path choices are:", choices)
     # Determine which paths are possible.
-    possible_map = {}
+    possible_lst = [False, False, False, False]
     for restype in choices[:-1]:
-        possible_map[restype] = True
+        possible_lst[restype] = True
         costs = blueprint[restype]
-        for qty, res in costs:
-            if resources[res] < qty:
-                possible_map[restype] = False
+        for res_idx, qty in enumerate(costs):
+            if resources[res_idx] < qty:
+                possible_lst[restype] = False
                 break
     # print("Possible paths are:", possible_map)
     # Try each path ...
     for restype in choices:
         # print("Path is:", restype)
         if restype is None:
-            new_robots = collections.Counter(robots)
-            new_resources = collections.Counter(resources) + new_allocations
+            new_robots = list(robots)
+            new_resources = list(a + b for a, b in zip(resources, new_allocations))
         else:
             cap = resource_caps[restype]
             if cap != 0 and robots[restype] == cap:
                 # We've maxed out this resource production.
                 continue
             costs = blueprint[restype]
-            can_produce = possible_map[restype]
+            can_produce = possible_lst[restype]
             if not can_produce:
                 continue
-            if restype == "ore" and (earlier_optimization & 0x001) != 0:
+            if restype == 0 and (earlier_optimization & 0x001) != 0:
                 continue
-            if restype == "clay" and (earlier_optimization & 0x010) != 0:
+            if restype == 1 and (earlier_optimization & 0x010) != 0:
                 continue
-            if restype == "obsidian" and (earlier_optimization & 0x100) != 0:
+            if restype == 2 and (earlier_optimization & 0x100) != 0:
                 continue
             # print("Building robot of type {}.".format(restype))
-            new_robots = robots + collections.Counter({restype: 1})
-            res_adjustment = collections.Counter(dict((res, qty) for qty, res in costs))
-            # print("res_adjustment:", res_adjustment)
-            new_resources = resources - res_adjustment + new_allocations
+            new_robots = list(robots)
+            new_robots[restype] += 1
+            new_resources = list(
+                a - b + c for a, b, c in zip(resources, costs, new_allocations)
+            )
         # print("new_resources:", new_resources)
         # Throw away extra resources
-        tmp_resources = collections.Counter()
-        for res, qty in new_resources.items():
-            cap = resource_caps[res]
+        tmp_resources = []
+        for qty, cap in zip(new_resources, resource_caps):
             if cap != 0:
-                max_qty = resource_caps[res] * (max_time - time)
+                max_qty = cap * (max_time - time)
             else:
                 max_qty = qty
-            tmp_resources[res] = min(max_qty, qty)
+            tmp_resources.append(min(max_qty, qty))
         new_resources = tmp_resources
         # print("new_resources after extra trimming:", new_resources)
         # Get results from the future.
         bitmap = 0b000
         if restype is None:
-            if possible_map.get("ore", False):
+            if possible_lst[0]:
                 bitmap |= 0b001
-            if possible_map.get("clay", False):
+            if possible_lst[1]:
                 bitmap |= 0b010
-            if possible_map.get("obsidian", False):
+            if possible_lst[2]:
                 bitmap |= 0b100
         # print("Earlier optimization bitmap:", earlier_optimization)
         future_results = evaluate_blueprint(
+            cache=cache,
             blueprint_id=blueprint_id,
             time=time + 1,
             max_time=max_time,
@@ -245,14 +290,17 @@ def evaluate_blueprint(
         )
         a0, a1 = winner
         b0, b1 = future_results
-        if b1["geode"] >= a1["geode"]:
+        if b1[3] >= a1[3]:
             winner = future_results
         # If you can build a geode robot, do it.
         # No reason to try other paths.
-        if restype == "geode":
+        if restype == 3:
             break
     # print("Geode winner:", winner)
     # print("")
+    if len(cache) == 35_776_709:
+        cache.clear()
+    cache[cache_key] = winner
     return winner
 
 
@@ -260,10 +308,9 @@ def harvest_resources(robots, resources):
     """
     Harvest resources and updated `resources`.
     """
-    additional_resources = collections.Counter()
-    for resource, qty in robots.items():
-        additional_resources[resource] += qty
-        # print("- Robots harvested {} units of {}.".format(qty, resource))
+    additional_resources = [0, 0, 0, 0]
+    for resource_index, qty in enumerate(robots):
+        additional_resources[resource_index] += qty
     return additional_resources
 
 
