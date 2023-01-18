@@ -36,8 +36,7 @@ def main(args):
             robots, resources = evaluate_blueprint(
                 cache=cache,
                 blueprint_id=bid,
-                time=1,
-                max_time=max_time,
+                time=max_time,
                 blueprint=optimized_blueprint,
                 robots=robots,
                 resources=resources,
@@ -117,7 +116,6 @@ def evaluate_blueprint(
     cache,
     blueprint_id,
     time,
-    max_time,
     blueprint,
     robots,
     resources,
@@ -127,80 +125,95 @@ def evaluate_blueprint(
     """
     Evaluate a blueprint.
     """
-    cache_key = (time, tuple(robots), tuple(resources), earlier_optimization)
+    cache_key = (time, *tuple(robots), *tuple(resources), earlier_optimization)
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
-    # Harvest
-    new_allocations = harvest_resources(robots, resources)
-
-    if time == max_time:
-        rval = (robots, list(a + b for a, b in zip(resources, new_allocations)))
-        # print("Max time reached.  Returning:", rval)
-        if len(cache) == 35_776_709:
-            cache.clear()
+    if time == 0:
+        rval = (robots, resources)
         cache[cache_key] = rval
         return rval
 
-    # Choices:
-    # - Wait.
-    # - Produce a robot of some type.
-    winner = [0, 0, 0, 0], [0, 0, 0, 0]
+    winner = (
+        list(robots),
+        [
+            resource_count + robot_count * time
+            for robot_count, resource_count in zip(robots, resources)
+        ],
+    )
 
-    # Choose which resource (or no resource) to produce.
-    choices = [3, 2, 1, 0, None]
+    # Choose which resource to produce.
+    choices = [3, 2, 1, 0]
     # No point in producing anything other than geode robots in the 2nd last
     # round.
-    if time == max_time - 1:
-        choices = [3, None]
-    if time == max_time - 2:
-        choices = [3, 2, 0, None]
+    if time == 1:
+        choices = [3]
+    if time == 2:
+        choices = [3, 2, 0]
     # Determine which paths are possible.
     possible_lst = [False, False, False, False]
-    for restype in choices[:-1]:
+    for restype in choices:
         possible_lst[restype] = True
         costs = blueprint[restype]
-        for res_idx, qty in enumerate(costs):
-            if resources[res_idx] < qty:
+        for robot_count, cost in zip(robots, costs):
+            if robot_count == 0 and cost > 0:
                 possible_lst[restype] = False
                 break
     # Try each path ...
     for restype in choices:
         # print("Path is:", restype)
-        if restype is None:
-            new_robots = list(robots)
-            new_resources = list(a + b for a, b in zip(resources, new_allocations))
-        else:
-            cap = resource_caps[restype]
-            if cap != 0 and robots[restype] == cap:
-                # We've maxed out this resource production.
+        can_produce = possible_lst[restype]
+        if not can_produce:
+            continue
+
+        cap = resource_caps[restype]
+        if cap != 0 and robots[restype] == cap:
+            # We've maxed out this resource production.
+            continue
+
+        if restype == 0 and (earlier_optimization & 0x001) != 0:
+            continue
+        if restype == 1 and (earlier_optimization & 0x010) != 0:
+            continue
+        if restype == 2 and (earlier_optimization & 0x100) != 0:
+            continue
+
+        # print("Building robot of type {}.".format(restype))
+        costs = blueprint[restype]
+        time_to_build = 0
+        for resource_on_hand, resource_required, robot_count in zip(
+            resources, costs, robots
+        ):
+            if resource_required == 0:
                 continue
-            costs = blueprint[restype]
-            can_produce = possible_lst[restype]
-            if not can_produce:
-                continue
-            if restype == 0 and (earlier_optimization & 0x001) != 0:
-                continue
-            if restype == 1 and (earlier_optimization & 0x010) != 0:
-                continue
-            if restype == 2 and (earlier_optimization & 0x100) != 0:
-                continue
-            # print("Building robot of type {}.".format(restype))
-            new_robots = list(robots)
-            new_robots[restype] += 1
-            new_resources = list(
-                a - b + c for a, b, c in zip(resources, costs, new_allocations)
-            )
+            delay = -(-(resource_required - resource_on_hand) // robot_count)
+            time_to_build = max(time_to_build, delay)
+        new_time = time - time_to_build - 1
+        if new_time <= 0:
+            continue
+        new_resources = [
+            resource_on_hand + robot_count * (time_to_build + 1) - cost
+            for resource_on_hand, robot_count, cost in zip(resources, robots, costs)
+        ]
+        new_robots = list(robots)
+        new_robots[restype] += 1
+
         # Throw away extra resources
         tmp_resources = []
         for qty, cap in zip(new_resources, resource_caps):
             if cap != 0:
-                max_qty = cap * (max_time - time)
+                max_qty = cap * time
             else:
                 max_qty = qty
             tmp_resources.append(min(max_qty, qty))
         new_resources = tmp_resources
+
+        a0, a1 = winner
+        b0, b1 = new_robots, new_resources
+        if b1[3] >= a1[3]:
+            winner = (b0, b1)
+
         # Get results from the future.
         bitmap = 0b000
         if restype is None:
@@ -213,8 +226,7 @@ def evaluate_blueprint(
         future_results = evaluate_blueprint(
             cache=cache,
             blueprint_id=blueprint_id,
-            time=time + 1,
-            max_time=max_time,
+            time=new_time,
             blueprint=blueprint,
             robots=new_robots,
             resources=new_resources,
@@ -233,16 +245,6 @@ def evaluate_blueprint(
         cache.clear()
     cache[cache_key] = winner
     return winner
-
-
-def harvest_resources(robots, resources):
-    """
-    Harvest resources and updated `resources`.
-    """
-    additional_resources = [0, 0, 0, 0]
-    for resource_index, qty in enumerate(robots):
-        additional_resources[resource_index] += qty
-    return additional_resources
 
 
 def print_heading(heading, symbol="-"):
