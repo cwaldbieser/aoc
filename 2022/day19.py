@@ -35,7 +35,6 @@ def main(args):
         try:
             robots, resources = evaluate_blueprint(
                 cache=cache,
-                blueprint_id=bid,
                 time=max_time,
                 blueprint=optimized_blueprint,
                 robots=robots,
@@ -114,7 +113,6 @@ def calc_resource_caps(blueprint):
 
 def evaluate_blueprint(
     cache,
-    blueprint_id,
     time,
     blueprint,
     robots,
@@ -124,16 +122,16 @@ def evaluate_blueprint(
 ):
     """
     Evaluate a blueprint.
+
+    Returns (robots, resources)
     """
+    if time == 0:
+        return robots, resources
+
     cache_key = (time, *tuple(robots), *tuple(resources), earlier_optimization)
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
-
-    if time == 0:
-        rval = (robots, resources)
-        cache[cache_key] = rval
-        return rval
 
     winner = (
         list(robots),
@@ -162,7 +160,6 @@ def evaluate_blueprint(
                 break
     # Try each path ...
     for restype in choices:
-        # print("Path is:", restype)
         can_produce = possible_lst[restype]
         if not can_produce:
             continue
@@ -179,7 +176,6 @@ def evaluate_blueprint(
         if restype == 2 and (earlier_optimization & 0x100) != 0:
             continue
 
-        # print("Building robot of type {}.".format(restype))
         costs = blueprint[restype]
         time_to_build = 0
         for resource_on_hand, resource_required, robot_count in zip(
@@ -189,30 +185,25 @@ def evaluate_blueprint(
                 continue
             delay = -(-(resource_required - resource_on_hand) // robot_count)
             time_to_build = max(time_to_build, delay)
-        new_time = time - time_to_build - 1
-        if new_time <= 0:
+        remaining_time = time - time_to_build - 1
+        if remaining_time <= 0:
             continue
+        new_robots = list(robots)
+        new_robots[restype] += 1
         new_resources = [
             resource_on_hand + robot_count * (time_to_build + 1) - cost
             for resource_on_hand, robot_count, cost in zip(resources, robots, costs)
         ]
-        new_robots = list(robots)
-        new_robots[restype] += 1
 
         # Throw away extra resources
         tmp_resources = []
         for qty, cap in zip(new_resources, resource_caps):
             if cap != 0:
-                max_qty = cap * time
+                max_qty = cap * remaining_time
             else:
                 max_qty = qty
             tmp_resources.append(min(max_qty, qty))
         new_resources = tmp_resources
-
-        a0, a1 = winner
-        b0, b1 = new_robots, new_resources
-        if b1[3] >= a1[3]:
-            winner = (b0, b1)
 
         # Get results from the future.
         bitmap = 0b000
@@ -225,8 +216,7 @@ def evaluate_blueprint(
                 bitmap |= 0b100
         future_results = evaluate_blueprint(
             cache=cache,
-            blueprint_id=blueprint_id,
-            time=new_time,
+            time=remaining_time,
             blueprint=blueprint,
             robots=new_robots,
             resources=new_resources,
@@ -239,8 +229,8 @@ def evaluate_blueprint(
             winner = future_results
         # If you can build a geode robot, do it.
         # No reason to try other paths.
-        if restype == 3:
-            break
+        # if restype == 3:
+        #     break
     if len(cache) == 35_776_709:
         cache.clear()
     cache[cache_key] = winner

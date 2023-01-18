@@ -13,23 +13,21 @@ Blueprint 1:
 + ore robot
   -  4 ore
 
-Cache hits: 0
-Cache misses: 0
 Robots
 ------
 
-- clay      :   5
-- geode     :   2
-- obsidian  :   2
 - ore       :   1
+- clay      :   6
+- obsidian  :   2
+- geode     :   2
 
 Resources
 ---------
 
-- clay      :  45
-- geode     :   9
+- ore       :   2
+- clay      :  47
 - obsidian  :   8
-- ore       :   4
+- geode     :   9
 
 Blueprint quality: 9
 
@@ -48,54 +46,23 @@ Blueprint 2:
 + ore robot
   -  2 ore
 
-Cache hits: 1981496
-Cache misses: 5886383
-Cache hits: 8957034
-Cache misses: 23886404
-Cache cleared.
-Cache hits: 16010536
-Cache misses: 41886407
-Cache cleared.
-Cache hits: 22222898
-Cache misses: 59886409
-Cache cleared.
-Cache hits: 29340022
-Cache misses: 77886411
-Cache cleared.
-Cache hits: 36404100
-Cache misses: 95886410
-Cache cleared.
-Cache hits: 43718441
-Cache misses: 113886412
-Cache cleared.
-Cache hits: 50859897
-Cache misses: 131886411
-Cache cleared.
-Cache hits: 58109669
-Cache misses: 149886415
-Cache cleared.
-Cache hits: 65647023
-Cache misses: 167886415
-Cache cleared.
-Cache hits: 73406044
-Cache misses: 185886414
-Cache cleared.
 Robots
 ------
 
+- ore       :   6
 - clay      :   6
-- geode     :   3
 - obsidian  :   6
-- ore       :   3
+- geode     :   3
 
 Resources
 ---------
 
+- ore       :  21
 - clay      :  45
-- geode     :  12
 - obsidian  :  18
-- ore       :  15
+- geode     :  12
 
 Blueprint quality: 24
 
 Total quality: 33
+Geode product: 108
