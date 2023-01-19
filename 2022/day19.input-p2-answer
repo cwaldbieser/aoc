@@ -1,0 +1,101 @@
+Blueprint
+=========
+
+Blueprint 1: 
++ geode robot
+  -  7 obsidian
+  -  2 ore
++ obsidian robot
+  - 11 clay
+  -  2 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Robots
+------
+
+- ore       :   4
+- clay      :   7
+- obsidian  :   6
+- geode     :   7
+
+Resources
+---------
+
+- ore       :   8
+- clay      :  18
+- obsidian  :  13
+- geode     :  38
+
+
+Blueprint
+=========
+
+Blueprint 2: 
++ geode robot
+  -  8 obsidian
+  -  2 ore
++ obsidian robot
+  - 20 clay
+  -  4 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  4 ore
+
+Robots
+------
+
+- ore       :   4
+- clay      :  13
+- obsidian  :   4
+- geode     :   4
+
+Resources
+---------
+
+- ore       :   8
+- clay      :  33
+- obsidian  :   8
+- geode     :  16
+
+
+Blueprint
+=========
+
+Blueprint 3: 
++ geode robot
+  - 16 obsidian
+  -  4 ore
++ obsidian robot
+  - 15 clay
+  -  3 ore
++ clay robot
+  -  4 ore
++ ore robot
+  -  3 ore
+
+Robots
+------
+
+- ore       :   4
+- clay      :  11
+- obsidian  :   8
+- geode     :   4
+
+Resources
+---------
+
+- ore       :   8
+- clay      :  26
+- obsidian  :  16
+- geode     :  17
+
+
+Geode product: 10336
+
+real	0m24.147s
+user	0m23.970s
+sys	0m0.176s

@@ -16,17 +16,17 @@ Blueprint 1:
 Robots
 ------
 
-- ore       :   7
-- clay      :   4
-- obsidian  :   2
+- ore       :   4
+- clay      :   6
+- obsidian  :   3
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  19
-- clay      :  28
-- obsidian  :   8
+- ore       :   8
+- clay      :  17
+- obsidian  :   9
 - geode     :   3
 
 Blueprint quality: 3
@@ -49,17 +49,17 @@ Blueprint 2:
 Robots
 ------
 
-- ore       :  17
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  12
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 100
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  32
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -82,17 +82,17 @@ Blueprint 3:
 Robots
 ------
 
-- ore       :  19
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  14
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 144
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  29
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -115,17 +115,17 @@ Blueprint 4:
 Robots
 ------
 
-- ore       :   8
-- clay      :   8
-- obsidian  :   4
+- ore       :   4
+- clay      :  11
+- obsidian  :   5
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  47
-- clay      :  41
-- obsidian  :  12
+- ore       :   8
+- clay      :  26
+- obsidian  :  13
 - geode     :   2
 
 Blueprint quality: 8
@@ -181,17 +181,17 @@ Blueprint 6:
 Robots
 ------
 
-- ore       :   9
-- clay      :   7
-- obsidian  :   2
+- ore       :   4
+- clay      :  11
+- obsidian  :   3
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  34
-- clay      :  49
-- obsidian  :   6
+- ore       :   8
+- clay      :  29
+- obsidian  :   7
 - geode     :   2
 
 Blueprint quality: 12
@@ -214,17 +214,17 @@ Blueprint 7:
 Robots
 ------
 
-- ore       :  10
-- clay      :   7
-- obsidian  :   3
+- ore       :   4
+- clay      :  12
+- obsidian  :   4
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  62
-- clay      :  36
-- obsidian  :   6
+- ore       :   8
+- clay      :  32
+- obsidian  :   8
 - geode     :   1
 
 Blueprint quality: 7
@@ -247,17 +247,17 @@ Blueprint 8:
 Robots
 ------
 
-- ore       :  19
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  14
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 144
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  29
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -280,17 +280,17 @@ Blueprint 9:
 Robots
 ------
 
-- ore       :   8
-- clay      :   7
-- obsidian  :   4
+- ore       :   4
+- clay      :  10
+- obsidian  :   5
 - geode     :   2
 
 Resources
 ---------
 
-- ore       :  39
-- clay      :  42
-- obsidian  :  12
+- ore       :   8
+- clay      :  24
+- obsidian  :  13
 - geode     :   6
 
 Blueprint quality: 54
@@ -313,16 +313,16 @@ Blueprint 10:
 Robots
 ------
 
-- ore       :   6
-- clay      :   5
+- ore       :   4
+- clay      :   7
 - obsidian  :   4
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  20
-- clay      :  22
+- ore       :   8
+- clay      :  16
 - obsidian  :   8
 - geode     :   1
 
@@ -346,16 +346,16 @@ Blueprint 11:
 Robots
 ------
 
-- ore       :   6
-- clay      :   6
+- ore       :   3
+- clay      :   9
 - obsidian  :   5
 - geode     :   4
 
 Resources
 ---------
 
-- ore       :  24
-- clay      :  48
+- ore       :   6
+- clay      :  18
 - obsidian  :  12
 - geode     :  15
 
@@ -379,17 +379,17 @@ Blueprint 12:
 Robots
 ------
 
-- ore       :  19
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  14
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 144
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  30
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -412,17 +412,17 @@ Blueprint 13:
 Robots
 ------
 
-- ore       :   6
-- clay      :   5
-- obsidian  :   5
+- ore       :   4
+- clay      :   6
+- obsidian  :   6
 - geode     :   3
 
 Resources
 ---------
 
-- ore       :  28
-- clay      :  35
-- obsidian  :  10
+- ore       :   8
+- clay      :  12
+- obsidian  :  12
 - geode     :   9
 
 Blueprint quality: 117
@@ -454,7 +454,7 @@ Resources
 ---------
 
 - ore       :   6
-- clay      :  16
+- clay      :   9
 - obsidian  :   7
 - geode     :  11
 
@@ -478,17 +478,17 @@ Blueprint 15:
 Robots
 ------
 
-- ore       :  17
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  12
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 100
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  29
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -511,17 +511,17 @@ Blueprint 16:
 Robots
 ------
 
-- ore       :  17
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  12
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 100
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  27
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -544,17 +544,17 @@ Blueprint 17:
 Robots
 ------
 
-- ore       :   5
-- clay      :   4
-- obsidian  :   4
+- ore       :   3
+- clay      :   5
+- obsidian  :   5
 - geode     :   3
 
 Resources
 ---------
 
-- ore       :  12
-- clay      :  26
-- obsidian  :  13
+- ore       :   6
+- clay      :  14
+- obsidian  :  12
 - geode     :  12
 
 Blueprint quality: 204
@@ -577,17 +577,17 @@ Blueprint 18:
 Robots
 ------
 
-- ore       :  17
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :   8
+- obsidian  :   5
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 100
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  16
+- obsidian  :  15
 - geode     :   0
 
 Blueprint quality: 0
@@ -610,17 +610,17 @@ Blueprint 19:
 Robots
 ------
 
-- ore       :  17
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  12
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 100
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  31
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -643,17 +643,17 @@ Blueprint 20:
 Robots
 ------
 
-- ore       :   9
-- clay      :   7
-- obsidian  :   4
+- ore       :   3
+- clay      :  12
+- obsidian  :   5
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  40
-- clay      :  49
-- obsidian  :  16
+- ore       :   6
+- clay      :  26
+- obsidian  :  17
 - geode     :   3
 
 Blueprint quality: 60
@@ -676,17 +676,17 @@ Blueprint 21:
 Robots
 ------
 
-- ore       :  11
-- clay      :   5
-- obsidian  :   2
+- ore       :   4
+- clay      :  11
+- obsidian  :   3
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  58
-- clay      :  35
-- obsidian  :   8
+- ore       :   8
+- clay      :  26
+- obsidian  :   9
 - geode     :   3
 
 Blueprint quality: 63
@@ -709,16 +709,16 @@ Blueprint 22:
 Robots
 ------
 
-- ore       :   6
-- clay      :   5
+- ore       :   4
+- clay      :   7
 - obsidian  :   5
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  20
-- clay      :  20
+- ore       :   8
+- clay      :  14
 - obsidian  :  10
 - geode     :   1
 
@@ -742,17 +742,17 @@ Blueprint 23:
 Robots
 ------
 
-- ore       :   4
-- clay      :   6
-- obsidian  :   7
+- ore       :   2
+- clay      :   7
+- obsidian  :   8
 - geode     :   4
 
 Resources
 ---------
 
-- ore       :  11
-- clay      :  49
-- obsidian  :  14
+- ore       :   4
+- clay      :  14
+- obsidian  :  16
 - geode     :  16
 
 Blueprint quality: 368
@@ -775,17 +775,17 @@ Blueprint 24:
 Robots
 ------
 
-- ore       :  19
-- clay      :   0
-- obsidian  :   0
+- ore       :   3
+- clay      :  15
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 144
-- clay      :   0
-- obsidian  :   0
+- ore       :   6
+- clay      :  34
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -808,17 +808,17 @@ Blueprint 25:
 Robots
 ------
 
-- ore       :   7
-- clay      :   7
-- obsidian  :   5
+- ore       :   3
+- clay      :  10
+- obsidian  :   6
 - geode     :   2
 
 Resources
 ---------
 
-- ore       :  26
-- clay      :  49
-- obsidian  :  16
+- ore       :   6
+- clay      :  21
+- obsidian  :  17
 - geode     :   7
 
 Blueprint quality: 175
@@ -850,7 +850,7 @@ Resources
 ---------
 
 - ore       :   6
-- clay      :  29
+- clay      :  11
 - obsidian  :   8
 - geode     :   9
 
@@ -874,16 +874,16 @@ Blueprint 27:
 Robots
 ------
 
-- ore       :   9
-- clay      :   7
+- ore       :   4
+- clay      :  12
 - obsidian  :   3
 - geode     :   2
 
 Resources
 ---------
 
-- ore       :  54
-- clay      :  50
+- ore       :   8
+- clay      :  28
 - obsidian  :   6
 - geode     :   5
 
@@ -907,17 +907,17 @@ Blueprint 28:
 Robots
 ------
 
-- ore       :  19
-- clay      :   0
-- obsidian  :   0
+- ore       :   4
+- clay      :  14
+- obsidian  :   1
 - geode     :   0
 
 Resources
 ---------
 
-- ore       : 144
-- clay      :   0
-- obsidian  :   0
+- ore       :   8
+- clay      :  33
+- obsidian  :   1
 - geode     :   0
 
 Blueprint quality: 0
@@ -949,7 +949,7 @@ Resources
 ---------
 
 - ore       :   2
-- clay      :  12
+- clay      :   7
 - obsidian  :  15
 - geode     :  15
 
@@ -973,16 +973,16 @@ Blueprint 30:
 Robots
 ------
 
-- ore       :   6
-- clay      :  10
+- ore       :   4
+- clay      :  12
 - obsidian  :   4
 - geode     :   1
 
 Resources
 ---------
 
-- ore       :  24
-- clay      :  41
+- ore       :   8
+- clay      :  32
 - obsidian  :   8
 - geode     :   1
 
@@ -990,3 +990,7 @@ Blueprint quality: 30
 
 Total quality: 2301
 Geode product: 0
+
+real	0m3.053s
+user	0m3.041s
+sys	0m0.012s

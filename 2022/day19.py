@@ -105,7 +105,7 @@ def calc_resource_caps(blueprint):
     caps = collections.Counter()
     capped_resources = set(("ore", "clay", "obsidian"))
     for costs in blueprint.values():
-        cost_map = collections.Counter(dict(costs))
+        cost_map = collections.Counter(dict(((y, x) for x, y in costs)))
         for restype in capped_resources:
             caps[restype] = max(caps[restype], cost_map[restype])
     return caps
@@ -125,6 +125,7 @@ def evaluate_blueprint(
 
     Returns (robots, resources)
     """
+    # print("time:", time, ", robots:", robots, ", resources:", resources)
     if time == 0:
         return robots, resources
 
@@ -227,10 +228,7 @@ def evaluate_blueprint(
         b0, b1 = future_results
         if b1[3] >= a1[3]:
             winner = future_results
-        # If you can build a geode robot, do it.
-        # No reason to try other paths.
-        # if restype == 3:
-        #     break
+
     if len(cache) == 35_776_709:
         cache.clear()
     cache[cache_key] = winner
